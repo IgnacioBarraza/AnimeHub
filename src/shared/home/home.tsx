@@ -13,12 +13,8 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-text">
-      <header className="bg-background-lighter p-4">
-        <h1 className="text-2xl font-bold">Anime Hub</h1>
-      </header>
-      <main className="p-4">
-        <button 
+    <div className="">
+      <button 
           onClick={toggleTheme}
           className="bg-primary text-white px-4 py-2 rounded"
         >
@@ -27,7 +23,6 @@ export default function Home() {
         <p className="mt-4">
           Current theme: {theme}
         </p>
-      </main>
     </div>
   )
 }
