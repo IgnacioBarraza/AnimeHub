@@ -17,3 +17,7 @@ export interface RouteConfig {
 export interface RouterProps {
   routes: RouteConfig[]
 }
+
+export interface ThemeProviderProps {
+  children: ReactNode; // Define the type for children
+}
