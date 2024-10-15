@@ -1,5 +1,5 @@
-import { Home } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Home } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 export default function Page404() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
