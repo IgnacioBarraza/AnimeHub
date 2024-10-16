@@ -7,7 +7,7 @@ export default function Auth() {
   return (
     <div className="flex w-full max-w-4xl bg-background-lighter rounded-lg shadow-lg overflow-hidden mx-auto">
       <div className="hidden md:block w-1/2 relative">
-        <img src="/placeholder.svg" alt="Anime character" />
+        <img src="/anime-placeholder.webp" alt="Anime character" />
       </div>
       <div className="w-full md:w-1/2 p-8">
         <h2 className="text-3xl font-bold text-text mb-6">
