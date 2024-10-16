@@ -1,12 +1,13 @@
 import { Moon, Search, Sun, User } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from '@/hooks/themeHook'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function Navbar() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const { theme, toggleTheme } = useTheme()
-  // const location = useLocation()
+  const location = useLocation()
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -29,7 +30,7 @@ export default function Navbar() {
   return (
     <header className="bg-background-lighter py-4 sticky top-0 z-10">
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <a href="/" className="text-2xl font-bold flex items-center">
+        <Link to="/" className="text-2xl font-bold flex items-center">
           <svg
             className="w-8 h-8 mr-2"
             version="1.1"
@@ -48,21 +49,21 @@ export default function Navbar() {
             />
           </svg>
           Anime Hub
-        </a>
+        </Link>
         <nav className="hidden md:flex space-x-4">
-          <a
-            href="/"
+          <Link
+            to="/home"
             className={`hover:text-gray-300 relative ${
-              isActive('/') ? 'font-bold text-white' : ''
+              isActive('/home') ? 'font-bold text-text' : ''
             }`}
           >
             Home
-            {isActive('/') && (
+            {isActive('/home') && (
               <div className="absolute left-0 bottom-0 w-full h-1 bg-blue-500 rounded-full mt-1"></div>
             )}
-          </a>
-          <a
-            href="/recommendations"
+          </Link>
+          <Link
+            to="/recommendations"
             className={`hover:text-gray-300 relative ${
               isActive('/recommendations') ? 'font-bold text-white' : ''
             }`}
@@ -71,9 +72,9 @@ export default function Navbar() {
             {isActive('/recommendations') && (
               <div className="absolute left-0 bottom-0 w-full h-1 bg-blue-500 rounded-full mt-1"></div>
             )}
-          </a>
-          <a
-            href="/anime-news"
+          </Link>
+          <Link
+            to="/anime-news"
             className={`hover:text-gray-300 relative ${
               isActive('/anime-news') ? 'font-bold text-white' : ''
             }`}
@@ -82,9 +83,9 @@ export default function Navbar() {
             {isActive('/anime-news') && (
               <div className="absolute left-0 bottom-0 w-full h-1 bg-blue-500 rounded-full mt-1"></div>
             )}
-          </a>
-          <a
-            href="/manga-news"
+          </Link>
+          <Link
+            to="/manga-news"
             className={`hover:text-gray-300 relative ${
               isActive('/manga-news') ? 'font-bold text-white' : ''
             }`}
@@ -93,9 +94,9 @@ export default function Navbar() {
             {isActive('/manga-news') && (
               <div className="absolute left-0 bottom-0 w-full h-1 bg-blue-500 rounded-full mt-1"></div>
             )}
-          </a>
-          <a
-            href="/help"
+          </Link>
+          <Link
+            to="/help"
             className={`hover:text-gray-300 relative ${
               isActive('/help') ? 'font-bold text-white' : ''
             }`}
@@ -104,14 +105,14 @@ export default function Navbar() {
             {isActive('/help') && (
               <div className="absolute left-0 bottom-0 w-full h-1 bg-blue-500 rounded-full mt-1"></div>
             )}
-          </a>
+          </Link>
         </nav>
         <div className="flex items-center space-x-4">
           <div className="relative">
             <input
               type="search"
               placeholder="Search manga..."
-              className="bg-[#2A2A2A] text-white pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-background-light text-text pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
           </div>
@@ -140,24 +141,24 @@ export default function Navbar() {
                     </>
                   )}
                 </button>
-                <a
-                  href="/account"
+                <Link
+                  to="/account"
                   className="block px-4 py-2 text-sm hover:bg-[#3A3A3A]"
                 >
                   My Account
-                </a>
-                <a
-                  href="/settings"
+                </Link>
+                <Link
+                  to="/settings"
                   className="block px-4 py-2 text-sm hover:bg-[#3A3A3A]"
                 >
                   Settings
-                </a>
-                <a
-                  href="/logout"
+                </Link>
+                <Link
+                  to="/logout"
                   className="block px-4 py-2 text-sm hover:bg-[#3A3A3A]"
                 >
                   Log Out
-                </a>
+                </Link>
               </div>
             )}
           </div>
