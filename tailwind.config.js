@@ -79,8 +79,10 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         text: {
-          DEFAULT: "hsl(var(--foreground))",
+          DEFAULT: "var(--color-text)",
           muted: "var(--color-text-muted)",
+          light: "var(--color-text-light)",
+          dark: "var(--color-text-dark)",
         },
         error: {
           DEFAULT: "var(--color-error)",
@@ -101,6 +103,14 @@ export default {
           3: "hsl(var(--chart-3))",
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
+        },
+      },
+      textColor: {
+        text: {
+          DEFAULT: "var(--color-text)",
+          muted: "var(--color-text-muted)",
+          light: "var(--color-text-light)",
+          dark: "var(--color-text-dark)",
         },
       },
     },

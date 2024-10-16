@@ -32,60 +32,20 @@
 
     /* Anime Hub Custom Variables */
     --color-primary: #3B82F6;
-    --color-primary-50: #EFF6FF;
-    --color-primary-100: #DBEAFE;
-    --color-primary-200: #BFDBFE;
-    --color-primary-300: #93C5FD;
-    --color-primary-400: #60A5FA;
-    --color-primary-500: #3B82F6;
-    --color-primary-600: #2563EB;
-    --color-primary-700: #1D4ED8;
-    --color-primary-800: #1E40AF;
-    --color-primary-900: #1E3A8A;
-
     --color-secondary: #10B981;
-    --color-secondary-50: #ECFDF5;
-    --color-secondary-100: #D1FAE5;
-    --color-secondary-200: #A7F3D0;
-    --color-secondary-300: #6EE7B7;
-    --color-secondary-400: #34D399;
-    --color-secondary-500: #10B981;
-    --color-secondary-600: #059669;
-    --color-secondary-700: #047857;
-    --color-secondary-800: #065F46;
-    --color-secondary-900: #064E3B;
+
+    /* Light Theme Text Colors */
+    --color-text: #1F2937;
+    --color-text-muted: #6B7280;
+    --color-text-heading: #111827; /* Darker shade for headings */
+    --color-text-link: #3B82F6; /* Primary color for links */
+    --color-text-link-hover: #2563EB; /* Darker shade on hover */
+    --color-text-disabled: #9CA3AF; /* Muted gray for disabled text */
 
     --color-background: #FFFFFF;
     --color-background-lighter: #F3F4F6;
     --color-background-light: #E5E7EB;
     --color-background-dark: #D1D5DB;
-
-    --color-text: #1F2937;
-    --color-text-muted: #6B7280;
-
-    --color-accent: #F59E0B;
-    --color-accent-50: #FFFBEB;
-    --color-accent-100: #FEF3C7;
-    --color-accent-200: #FDE68A;
-    --color-accent-300: #FCD34D;
-    --color-accent-400: #FBBF24;
-    --color-accent-500: #F59E0B;
-    --color-accent-600: #D97706;
-    --color-accent-700: #B45309;
-    --color-accent-800: #92400E;
-    --color-accent-900: #78350F;
-
-    --color-error: #EF4444;
-    --color-error-50: #FEF2F2;
-    --color-error-100: #FEE2E2;
-    --color-error-200: #FECACA;
-    --color-error-300: #FCA5A5;
-    --color-error-400: #F87171;
-    --color-error-500: #EF4444;
-    --color-error-600: #DC2626;
-    --color-error-700: #B91C1C;
-    --color-error-800: #991B1B;
-    --color-error-900: #7F1D1D;
   }
 
   .dark {
@@ -114,8 +74,14 @@
     --color-background-lighter: #1E1E1E;
     --color-background-light: #2A2A2A;
     --color-background-dark: #0A0A0A;
+
+    /* Dark Theme Text Colors */
     --color-text: #FFFFFF;
     --color-text-muted: #A0AEC0;
+    --color-text-heading: #E5E7EB; /* Light gray for headings */
+    --color-text-link: #60A5FA; /* Lighter blue for links */
+    --color-text-link-hover: #3B82F6; /* Brighten on hover */
+    --color-text-disabled: #4A5568; /* Darker muted gray for disabled text */
   }
 
   .light {
