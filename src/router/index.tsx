@@ -2,8 +2,11 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import Page404 from '../shared/page404'
 import ProtectedRoute from '../routes/protectedRoute'
 import { RouteConfig, RouterProps } from '@/utils/interfaces'
+import Navbar from '@/components/navbar'
+import { ThemeProvider } from '@/context/themeContext'
+import { LocationProvider } from '@/context/locationContext'
 
-export default function Router({routes}: RouterProps) {
+export default function Router({ routes }: RouterProps) {
   // Function to recursively render routes
   const renderRoutes = (routes: RouteConfig[]) => {
     return routes.map((route: RouteConfig) => {
@@ -26,10 +29,17 @@ export default function Router({routes}: RouterProps) {
 
   return (
     <BrowserRouter>
-      <Routes>
-        {renderRoutes(routes)}
-        <Route path="*" element={<Page404 />} />
-      </Routes>
+      <ThemeProvider>
+        <LocationProvider>
+          <div className="min-h-screen bg-background text-text">
+            <Navbar />
+            <Routes>
+              {renderRoutes(routes)}
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+          </div>
+        </LocationProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

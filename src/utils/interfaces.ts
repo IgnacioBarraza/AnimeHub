@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { Location } from 'react-router-dom'
 
 export interface ProtectedRouteProps {
   roles?: string[]
@@ -18,6 +19,10 @@ export interface RouterProps {
   routes: RouteConfig[]
 }
 
-export interface ThemeProviderProps {
+export interface ContextProviderProps {
   children: ReactNode; // Define the type for children
+}
+
+export interface LocationContextProps {
+  location: Location
 }

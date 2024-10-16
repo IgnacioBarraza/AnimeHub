@@ -1,4 +1,4 @@
-import { ThemeProviderProps } from '@/utils/interfaces'
+import { ContextProviderProps } from '@/utils/interfaces'
 import { createContext, useState, useEffect } from 'react'
 
 interface ThemeContextProps {
@@ -10,7 +10,7 @@ export const ThemeContext = createContext<ThemeContextProps | undefined>(
   undefined
 )
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
+export function ThemeProvider({ children }: ContextProviderProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     // Get the initial theme from localStorage or default to 'dark'
     const storedTheme = localStorage.getItem('theme')
