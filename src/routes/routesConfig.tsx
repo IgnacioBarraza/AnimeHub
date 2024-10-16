@@ -1,6 +1,7 @@
 import Auth from '@/auth/auth'
 import Home from '@/shared/home/home'
 import Layout from '@/shared/layout'
+import MangaDetails from '@/shared/manga-details/mangaDetails'
 import Page404 from '@/shared/page404'
 import { Navigate } from 'react-router-dom'
 
@@ -16,6 +17,10 @@ const routes = [
       {
         path: '',
         component: <Home />
+      },
+      {
+        path: 'manga-details',
+        component: <MangaDetails />
       }
     ]
   },

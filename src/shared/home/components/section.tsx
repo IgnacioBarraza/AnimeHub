@@ -1,6 +1,7 @@
 import { Series } from '@/utils/interfaces'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function SeriesScroll({
   title,
@@ -10,6 +11,7 @@ export default function SeriesScroll({
   series: Series[]
 }) {
   const [scrollPosition, setScrollPosition] = useState(0)
+  const navigate = useNavigate()
   // Create a ref for the slider
   const sliderRef = useRef<HTMLDivElement | null>(null)
 
@@ -19,6 +21,11 @@ export default function SeriesScroll({
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' })
       setScrollPosition(sliderRef.current.scrollLeft + scrollAmount)
     }
+  }
+
+  const goToMangaDetail = (id: string) => {
+    console.log(id)
+    navigate(`manga-details?id=${id}`)
   }
 
   return (
@@ -32,13 +39,13 @@ export default function SeriesScroll({
         >
           {series.map((item) => (
             <div key={item.id} className="flex-none w-48">
-              <div className="relative h-64 w-full mb-2">
+              <button className="relative h-64 w-full mb-2" onClick={() => goToMangaDetail(item.id)}>
                 <img
                   src={item.imageUrl}
                   alt={item.title}
                   className="w-full h-full object-cover rounded-md"
                 />
-              </div>
+              </button>
               <h3 className="font-semibold text-foreground">{item.title}</h3>
               <div className="flex items-center">
                 <Star className="w-4 h-4 text-yellow-400 mr-1" />

@@ -1,8 +1,11 @@
 import { categoriesDummy, Category } from '@/utils/interfaces'
 import SeriesScroll from './components/section'
+import { Link } from 'react-router-dom'
+import { useTheme } from '@/hooks/themeHook'
 
 export default function Home() {
   const categories: Category[] = categoriesDummy
+  const { theme } = useTheme()
 
   return (
     <div className="w-10/12 mx-auto px-4 py-8">
@@ -13,13 +16,13 @@ export default function Home() {
             Explore a vast collection of captivating manga, from action-packed
             adventures to heartwarming romance dramas.
           </p>
-          <button className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+          <Link to="/manga" className="px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary/90">
             Browse manga
-          </button>
+          </Link>
         </div>
         <div className="flex-1">
           <img
-            src="/home-placeholder.webp"
+            src={theme === 'dark' ? '/home-placeholder.webp' : '/home-placeholder-light.webp'}
             alt="Anime character"
             className="w-full h-auto rounded-lg shadow-lg"
           />
