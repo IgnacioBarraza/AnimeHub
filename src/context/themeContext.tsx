@@ -12,16 +12,21 @@ export const ThemeContext = createContext<ThemeContextProps | undefined>(
 
 export function ThemeProvider({ children }: ContextProviderProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    // Get the initial theme from localStorage or default to 'dark'
-    const storedTheme = localStorage.getItem('theme')
-    return storedTheme === 'light' || storedTheme === 'dark'
-      ? storedTheme
-      : 'dark'
+    if (typeof window !== 'undefined') {
+      // Ensure this code only runs on the client
+      const savedTheme = localStorage.getItem('theme')
+      return savedTheme ? (savedTheme as 'light' | 'dark') : 'dark'
+    }
+    return 'dark' // Default to 'dark' when server rendering or no access to localStorage
   })
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-    document.documentElement.classList.toggle('light', theme === 'light')
+    if (typeof window !== 'undefined') {
+      // Apply the theme class to the <html> element
+      document.documentElement.className = theme
+      // Save the current theme to localStorage
+      localStorage.setItem('theme', theme)
+    }
   }, [theme])
 
   const toggleTheme = () => {
