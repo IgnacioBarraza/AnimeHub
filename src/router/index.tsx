@@ -1,8 +1,8 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import Page404 from '../shared/page404'
-import ProtectedRoute from '../routes/protectedRoute'
+import Page404 from '@/shared/page404'
+import ProtectedRoute from '@/routes/protectedRoute'
 import { RouteConfig, RouterProps } from '@/utils/interfaces'
-import Navbar from '@/components/navbar'
+import Navbar from '@/components/navbar/navbar'
 import { ThemeProvider } from '@/context/themeContext'
 import { LocationProvider } from '@/context/locationContext'
 

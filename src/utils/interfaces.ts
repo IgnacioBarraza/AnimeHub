@@ -26,3 +26,8 @@ export interface ContextProviderProps {
 export interface LocationContextProps {
   location: Location
 }
+
+export interface NavItemProps {
+  href: string
+  children: ReactNode
+}
