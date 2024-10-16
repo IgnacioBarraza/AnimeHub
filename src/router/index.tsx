@@ -34,7 +34,7 @@ export default function Router({ routes }: RouterProps) {
         <LocationProvider>
           <div className="min-h-screen bg-background text-text flex flex-col">
             <Navbar />
-            <main className="flex-grow flex items-center justify-center px-4 py-12">
+            <main className="flex-grow overflow-y-auto" style={{ height: 'calc(100vh - 128px)' }}>
               <Routes>
                 {renderRoutes(routes)}
                 <Route path="*" element={<Page404 />} />
