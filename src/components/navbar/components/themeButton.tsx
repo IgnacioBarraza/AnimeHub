@@ -1,11 +1,18 @@
 import { useTheme } from '@/hooks/themeHook'
+import { ThemeButtonProps } from '@/utils/interfaces'
 import { Moon, Sun } from 'lucide-react'
 
-export const ThemeButton = () => {
+export const ThemeButton = ({ onClick }: ThemeButtonProps) => {
   const { theme, toggleTheme } = useTheme()
+
+  const handleClick = () => {
+    toggleTheme()
+    onClick()
+  }
+
   return (
     <button
-      onClick={toggleTheme}
+      onClick={handleClick}
       className="w-full text-left px-4 py-2 text-sm hover:bg-background-lighter flex items-center"
     >
       {theme === 'dark' ? (

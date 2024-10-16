@@ -1,4 +1,4 @@
-import { User } from 'lucide-react'
+import { Menu, User, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { NavItem } from './components/navItem'
@@ -6,15 +6,29 @@ import { ThemeButton } from './components/themeButton'
 import AnimeHubLogo from './components/logo'
 import SearchComponent from './components/search'
 import { useLocationContext } from '@/hooks/locationHook'
+import MobileNav from './components/mobileNav'
 
 export default function Navbar() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { location } = useLocationContext()
 
   const isLoginOrNotFound =
     location.pathname === '/login' || location.pathname === '/not-found'
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen)
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -39,6 +53,7 @@ export default function Navbar() {
           <AnimeHubLogo className="w-8 h-8 mr-2" />
           Anime Hub
         </Link>
+
         {!isLoginOrNotFound && (
           <>
             <nav className="hidden md:flex space-x-4">
@@ -48,13 +63,12 @@ export default function Navbar() {
               <NavItem href="/manga-news">Manga News</NavItem>
               <NavItem href="/help">Help</NavItem>
             </nav>
-            <div className="flex items-center space-x-4">
+
+            <div className="hidden md:flex items-center space-x-4">
               <SearchComponent />
               <div className="relative" ref={dropdownRef}>
                 <button
-                  onClick={() =>
-                    setIsProfileDropdownOpen(!isProfileDropdownOpen)
-                  }
+                  onClick={toggleProfileDropdown}
                   className="flex items-center focus:outline-none"
                 >
                   <User className="w-6 h-6" />
@@ -92,14 +106,34 @@ export default function Navbar() {
                         </Link>
                       </>
                     )}
-                    <ThemeButton />
+
+                    <ThemeButton onClick={toggleProfileDropdown}/>
                   </div>
                 )}
               </div>
             </div>
+
+            <button className="md:hidden" onClick={toggleMobileMenu}>
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6 text-foreground" />
+              ) : (
+                <Menu className="w-6 h-6 text-foreground" />
+              )}
+            </button>
           </>
         )}
       </div>
+
+      {isMobileMenuOpen && (
+        <MobileNav
+          isProfileDropdownOpen={isProfileDropdownOpen}
+          toggleProfileDropdown={toggleProfileDropdown}
+          dropdownRef={dropdownRef}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={() => {}}
+          closeMenu={closeMobileMenu} 
+        />
+      )}
     </header>
   )
 }
