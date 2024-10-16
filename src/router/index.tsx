@@ -5,6 +5,7 @@ import { RouteConfig, RouterProps } from '@/utils/interfaces'
 import Navbar from '@/components/navbar/navbar'
 import { ThemeProvider } from '@/context/themeContext'
 import { LocationProvider } from '@/context/locationContext'
+import Footer from '@/components/footer/footer'
 
 export default function Router({ routes }: RouterProps) {
   // Function to recursively render routes
@@ -31,12 +32,15 @@ export default function Router({ routes }: RouterProps) {
     <BrowserRouter>
       <ThemeProvider>
         <LocationProvider>
-          <div className="min-h-screen bg-background text-text">
+          <div className="min-h-screen bg-background text-text flex flex-col">
             <Navbar />
-            <Routes>
-              {renderRoutes(routes)}
-              <Route path="*" element={<Page404 />} />
-            </Routes>
+            <main className="flex-grow flex items-center justify-center px-4 py-12">
+              <Routes>
+                {renderRoutes(routes)}
+                <Route path="*" element={<Page404 />} />
+              </Routes>
+            </main>
+            <Footer />
           </div>
         </LocationProvider>
       </ThemeProvider>

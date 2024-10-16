@@ -1,5 +1,4 @@
-import Login from '@/auth/login'
-import Register from '@/auth/register'
+import Auth from '@/auth/auth'
 import Home from '@/shared/home/home'
 import Layout from '@/shared/layout'
 import Page404 from '@/shared/page404'
@@ -8,11 +7,7 @@ import { Navigate } from 'react-router-dom'
 const routes = [
   {
     path: '/login',
-    component: <Login />
-  },
-  {
-    path: '/register',
-    component: <Register />
+    component: <Auth />
   },
   {
     path: '/home',
