@@ -7,29 +7,40 @@ import {
   Star,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { LastChapters } from './components/lastChapters'
 import { useMangaContext } from '@/hooks/mangaHook'
 import { Manga } from '@/utils/interfaces'
 import '@/App.css'
 
-
 export default function MangaDetails() {
   const [searchParams] = useSearchParams()
   const [scrollPosition, setScrollPosition] = useState(0)
   const [manga, setManga] = useState<Manga | null>(null)
-  const { getStoredMangaById } = useMangaContext()
+  const [mangaDexId, setMangaDexId] = useState<string | null>(null)
+  const { getStoredMangaById, getMangaDexIdByTitle } = useMangaContext()
   const sliderRef = useRef<HTMLDivElement | null>(null)
   const id = searchParams.get('id')
 
   useEffect(() => {
-    if (id) {
-      const storedManga = getStoredMangaById(id)
-      if (storedManga) {
-        setManga(storedManga)
+    const fetchManga = async () => {
+      if (id) {
+        const storedManga = getStoredMangaById(id)
+        if (storedManga) {
+          // Await the MangaDex ID retrieval
+          const fetchedMangaDexId = await getMangaDexIdByTitle(
+            storedManga.title
+          )
+          if (fetchedMangaDexId) {
+            setMangaDexId(fetchedMangaDexId)
+          }
+          setManga(storedManga)
+        }
       }
     }
-  }, [id, getStoredMangaById])
+
+    fetchManga() // Call the async function
+  }, [id, getStoredMangaById, getMangaDexIdByTitle])
 
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
@@ -55,9 +66,16 @@ export default function MangaDetails() {
               className="w-full rounded-lg shadow-lg"
             />
             <div className="mt-4 flex justify-between items-center">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-                Read Now
-              </button>
+              {mangaDexId && (
+                <Link
+                  to={`https://mangadex.org/title/${mangaDexId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300"
+                >
+                  Read Now
+                </Link>
+              )}
               {manga.score && (
                 <div className="flex items-center">
                   <Star className="w-5 h-5 text-yellow-400 mr-1" />
@@ -97,7 +115,7 @@ export default function MangaDetails() {
                 </span>
               </div>
             </div>
-            <LastChapters />
+            {mangaDexId && <LastChapters mangaDexId={mangaDexId} />}
           </div>
         </div>
       ) : (

@@ -156,42 +156,42 @@ export interface MangaApiResponse {
   };
 }
 
+export interface LastChaptersProps {
+  mangaDexId: string // Expecting MangaDex ID as a prop
+}
 
-// export const categoriesDummy: Category[] = [
-//   {
-//     title: 'Popular',
-//     series: [
-//       { id: '1', title: 'Jujutsu Kaisen', rating: 8.5, genres: ['Action', 'Supernatural', 'School'], imageUrl: 'https://cdn.myanimelist.net/images/manga/3/210341.webp' },
-//       { id: '2', title: 'One Piece', rating: 9.2, genres: ['Action', 'Adventure', 'Fantasy'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/253146.webp' },
-//       { id: '3', title: 'Kanojo mo kanojo', rating: 6.9, genres: ['Comedy', 'Romance', 'School'], imageUrl: 'https://cdn.myanimelist.net/images/manga/3/279849.webp' },
-//       { id: '4', title: 'Dragon Ball', rating: 8.4, genres: ['Action', 'Comedy', 'Adventure'], imageUrl: 'https://cdn.myanimelist.net/images/manga/1/267793.webp' },
-//       { id: '5', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//       { id: '6', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//       { id: '7', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//       { id: '8', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//       { id: '9', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//       { id: '10', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//       { id: '11', title: 'Shingeki no kyojin', rating: 8.6, genres: ['Action', 'Drama', 'Military'], imageUrl: 'https://cdn.myanimelist.net/images/manga/2/37846.webp' },
-//     ]
-//   },
-//   {
-//     title: 'New Releases',
-//     series: [
-//       { id: '6', title: 'Demon Slayer', rating: 8.7, genres: ['Action', 'Supernatural'], imageUrl: '/placeholder.svg' },
-//       { id: '7', title: 'My Hero Academia', rating: 8.0, genres: ['Action', 'Superhero'], imageUrl: '/placeholder.svg' },
-//       { id: '8', title: 'Tokyo Revengers', rating: 8.1, genres: ['Action', 'Time Travel'], imageUrl: '/placeholder.svg' },
-//       { id: '9', title: 'Haikyuu!!', rating: 8.7, genres: ['Sports', 'Comedy'], imageUrl: '/placeholder.svg' },
-//       { id: '10', title: 'Black Clover', rating: 7.9, genres: ['Action', 'Fantasy'], imageUrl: '/placeholder.svg' },
-//     ]
-//   },
-//   {
-//     title: 'Top Rated',
-//     series: [
-//       { id: '11', title: 'Fullmetal Alchemist: Brotherhood', rating: 9.1, genres: ['Action', 'Adventure'], imageUrl: '/placeholder.svg' },
-//       { id: '12', title: 'Death Note', rating: 9.0, genres: ['Mystery', 'Psychological'], imageUrl: '/placeholder.svg' },
-//       { id: '13', title: 'Steins;Gate', rating: 9.1, genres: ['Sci-Fi', 'Thriller'], imageUrl: '/placeholder.svg' },
-//       { id: '14', title: 'Hunter x Hunter', rating: 9.1, genres: ['Action', 'Adventure'], imageUrl: '/placeholder.svg' },
-//       { id: '15', title: 'Gintama', rating: 8.9, genres: ['Action', 'Comedy'], imageUrl: '/placeholder.svg' },
-//     ]
-//   },
-// ]
+interface ChapterAttributes {
+  volume: string
+  chapter: string
+  title: string
+  translatedLanguage: string
+  externalUrl: string | null
+  publishAt: string
+  readableAt: string
+  createdAt: string
+  updatedAt: string
+  pages: number
+  version: number
+}
+
+export interface Chapter {
+  id: string
+  type: string
+  attributes: ChapterAttributes
+  relationships: Array<{
+    id: string
+    type: string
+  }>
+}
+
+export interface LastChaptersResponse {
+  result: string
+  response: string
+  data: Chapter[] // Array of chapters
+  limit: number
+  offset: number
+  total: number
+}
+export interface LastChaptersProps {
+  mangaDexId: string
+}

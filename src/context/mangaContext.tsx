@@ -1,12 +1,15 @@
 import axios from 'axios'
 import { createContext, useState, useEffect } from 'react'
 import {
+  Chapter,
   ContextProviderProps,
+  LastChaptersResponse,
   Manga,
   MangaApiResponse,
 } from '@/utils/interfaces'
 
-const base_url = 'https://api.jikan.moe/v4'
+const jikan_base_url = 'https://api.jikan.moe/v4'
+const mangadex_base_url = 'https://api.mangadex.org'
 
 interface MangaContextProps {
   getMangaById: (id: string) => Promise<Manga | null>
@@ -16,6 +19,8 @@ interface MangaContextProps {
   getPopularManga: () => Promise<Manga[]>
   getTopRatedManga: () => Promise<Manga[]>
   getNewReleases: () => Promise<Manga[]>
+  getMangaDexIdByTitle: (title: string) => Promise<string | null>
+  fetchLastChapters: (mangaDexId: string) => Promise<Chapter[]>
 }
 
 export const MangaContext = createContext<MangaContextProps | undefined>(
@@ -24,6 +29,7 @@ export const MangaContext = createContext<MangaContextProps | undefined>(
 
 export const MangaProvider = ({ children }: ContextProviderProps) => {
   const [cachedData, setCachedData] = useState<Record<string, Manga>>({})
+  const [lastChaptersCache, setLastChaptersCache] = useState<Record<string, Chapter[]>>({})
   const [popularManga, setPopularManga] = useState<Manga[]>([])
   const [topRatedManga, setTopRatedManga] = useState<Manga[]>([])
   const [newReleases, setNewReleases] = useState<Manga[]>([])
@@ -56,7 +62,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
     if (cachedData[id]) return cachedData[id]
 
     try {
-      const response = await axios.get<Manga>(`${base_url}/manga/${id}`)
+      const response = await axios.get<Manga>(`${jikan_base_url}/manga/${id}`)
       const manga = response.data
       setCachedData((prev) => ({ ...prev, [id]: manga }))
       return manga
@@ -74,7 +80,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
   const searchManga = async (query: string): Promise<Manga[]> => {
     try {
       const response = await axios.get<MangaApiResponse>(
-        `${base_url}/manga?q=${query}`
+        `${jikan_base_url}/manga?q=${query}`
       )
       const searchResults = response.data.data
       searchResults.forEach((manga) => {
@@ -83,6 +89,42 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
       return searchResults
     } catch (error) {
       console.error('Failed to search manga:', error)
+      return []
+    }
+  }
+
+  const fetchMangaDexIdByTitle = async (title: string): Promise<string | null> => {
+    try {
+      const response = await axios.get(`${mangadex_base_url}/manga?title=${encodeURIComponent(title)}`)
+      if (response.data.result === 'ok' && response.data.data.length > 0) {
+        return response.data.data[0].id
+      }
+      return null
+    } catch (error) {
+      console.error('Failed to fetch MangaDex ID:', error)
+      return null
+    }
+  }
+
+  const fetchLastChapters = async (mangaDexId: string): Promise<Chapter[]> => {
+    // Check the cache first
+    if (lastChaptersCache[mangaDexId]) {
+      return lastChaptersCache[mangaDexId]
+    }
+
+    try {
+      const response = await axios.get<LastChaptersResponse>(
+        `${mangadex_base_url}/chapter?manga=${mangaDexId}&order[publishAt]=desc&translatedLanguage[]=en&limit=4`
+      )
+      if (response.data.result === 'ok') {
+        const chapters = response.data.data || []
+        // Cache the fetched chapters
+        setLastChaptersCache((prev) => ({ ...prev, [mangaDexId]: chapters }))
+        return chapters
+      }
+      return []
+    } catch (error) {
+      console.error('Failed to fetch last chapters:', error)
       return []
     }
   }
@@ -119,7 +161,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
     }
 
     try {
-      let endpoint = `${base_url}/manga?`
+      let endpoint = `${jikan_base_url}/manga?`
 
       switch (type) {
         case 'popular':
@@ -178,6 +220,8 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
         getPopularManga,
         getTopRatedManga,
         getNewReleases,
+        getMangaDexIdByTitle: fetchMangaDexIdByTitle,
+        fetchLastChapters
       }}
     >
       {children}
