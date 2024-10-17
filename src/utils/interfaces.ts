@@ -131,12 +131,12 @@ export interface Manga {
   title_english: string;
   title_japanese: string;
   type: string;
-  chapters: number;
-  volumes: number;
+  chapters: number | null;
+  volumes: number | null;
   status: string;
   publishing: boolean;
   published: Published;
-  score: number;
+  score: number | null;
   scored_by: number;
   rank: number;
   popularity: number;
@@ -146,6 +146,14 @@ export interface Manga {
   background: string;
   authors: Author[];
   genres: Genre[];
+}
+
+export interface MangaApiResponse {
+  data: Manga[]; // The array of anime/manga results
+  pagination: {
+    last_visible_page: number; // The last page number available
+    has_next_page: boolean; // Whether there's a next page of results
+  };
 }
 
 
