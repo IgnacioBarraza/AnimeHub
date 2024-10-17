@@ -1,18 +1,17 @@
-import { Series } from '@/utils/interfaces'
+import { Manga } from '@/utils/interfaces' // Import Manga interface
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function SeriesScroll({
   title,
-  series
+  series,
 }: {
   title: string
-  series: Series[]
+  series: Manga[]
 }) {
   const [scrollPosition, setScrollPosition] = useState(0)
   const navigate = useNavigate()
-  // Create a ref for the slider
   const sliderRef = useRef<HTMLDivElement | null>(null)
 
   const scroll = (direction: 'left' | 'right') => {
@@ -23,8 +22,7 @@ export default function SeriesScroll({
     }
   }
 
-  const goToMangaDetail = (id: string) => {
-    console.log(id)
+  const goToMangaDetail = (id: number) => {
     navigate(`manga-details?id=${id}`)
   }
 
@@ -38,10 +36,13 @@ export default function SeriesScroll({
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {series.map((item) => (
-            <div key={item.id} className="flex-none w-48">
-              <button className="relative h-64 w-full mb-2" onClick={() => goToMangaDetail(item.id)}>
+            <div key={item.mal_id} className="flex-none w-48">
+              <button
+                className="relative h-64 w-full mb-2"
+                onClick={() => goToMangaDetail(item.mal_id)}
+              >
                 <img
-                  src={item.imageUrl}
+                  src={item.images.jpg.image_url}
                   alt={item.title}
                   className="w-full h-full object-cover rounded-md"
                 />
@@ -50,11 +51,11 @@ export default function SeriesScroll({
               <div className="flex items-center">
                 <Star className="w-4 h-4 text-yellow-400 mr-1" />
                 <span className="text-sm text-muted-foreground">
-                  {item.rating.toFixed(1)}
+                  {item.score?.toFixed(1) ?? 'N/A'}
                 </span>
               </div>
               <div className="text-xs text-muted-foreground mt-1">
-                {item.genres.join(', ')}
+                {item.genres.map((genre) => genre.name).join(', ')}
               </div>
             </div>
           ))}

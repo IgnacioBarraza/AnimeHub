@@ -131,12 +131,12 @@ export interface Manga {
   title_english: string;
   title_japanese: string;
   type: string;
-  chapters: number | null;
-  volumes: number | null;
+  chapters: number;
+  volumes: number;
   status: string;
   publishing: boolean;
   published: Published;
-  score: number | null;
+  score: number;
   scored_by: number;
   rank: number;
   popularity: number;

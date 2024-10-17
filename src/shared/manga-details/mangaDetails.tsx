@@ -6,16 +6,30 @@ import {
   Clock,
   Star,
 } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { LastChapters } from './components/lastChapters'
-import { categoriesDummy, Category, Manga } from '@/utils/interfaces' // Adjust the import based on your file structure
+import { useMangaContext } from '@/hooks/mangaHook'
+import { Manga } from '@/utils/interfaces'
+import '@/App.css'
+
 
 export default function MangaDetails() {
   const [searchParams] = useSearchParams()
   const [scrollPosition, setScrollPosition] = useState(0)
+  const [manga, setManga] = useState<Manga | null>(null)
+  const { getStoredMangaById } = useMangaContext()
   const sliderRef = useRef<HTMLDivElement | null>(null)
   const id = searchParams.get('id')
+
+  useEffect(() => {
+    if (id) {
+      const storedManga = getStoredMangaById(id)
+      if (storedManga) {
+        setManga(storedManga)
+      }
+    }
+  }, [id, getStoredMangaById])
 
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
@@ -25,23 +39,10 @@ export default function MangaDetails() {
     }
   }
 
-  const findMangaById = (
-    mangaData: Category[],
-    id: string | null
-  ): Manga | null => {
-    if (!id) return null // Return null if id is not provided
-
-    // Iterate through the data structure to find the manga by id
-    for (const category of mangaData) {
-      const manga = category.series.find((manga) => manga.id === id)
-      if (manga) return manga // Return the found manga
-    }
-
-    return null // Return null if not found
+  const extractYear = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.getFullYear()
   }
-
-  const manga = findMangaById(categoriesDummy, id)
-  console.log(manga)
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -49,44 +50,51 @@ export default function MangaDetails() {
         <div className="flex flex-col md:flex-row gap-8 mx-auto">
           <div className="md:w-1/3">
             <img
-              src={manga.imageUrl}
+              src={manga.images.webp.large_image_url}
               alt={`${manga.title} Manga Cover`}
-              width={300}
-              height={450}
               className="w-full rounded-lg shadow-lg"
             />
             <div className="mt-4 flex justify-between items-center">
               <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
                 Read Now
               </button>
-              <div className="flex items-center">
-                <Star className="w-5 h-5 text-yellow-400 mr-1" />
-                <span className="font-bold">{manga.rating}</span>
-              </div>
+              {manga.score && (
+                <div className="flex items-center">
+                  <Star className="w-5 h-5 text-yellow-400 mr-1" />
+                  <span className="font-bold">{manga.score}</span>
+                </div>
+              )}
             </div>
           </div>
           <div className="md:w-2/3">
             <h1 className="text-4xl font-bold mb-4">{manga.title}</h1>
-            <p className="text-text-muted mb-4">
-              {`Follow the adventures of ${manga.title}...`}{' '}
-              {/* Update this description as needed */}
-            </p>
+            <p className="text-text-muted mb-4">{manga.synopsis}</p>
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center">
-                <BookOpen className="w-5 h-5 mr-2" />
-                <span>{`${manga.genres.length} chapters`}</span>
-              </div>
+              {manga.chapters && (
+                <div className="flex items-center">
+                  <BookOpen className="w-5 h-5 mr-2" />
+                  <span>{`${manga.chapters} chapters`}</span>
+                </div>
+              )}
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-2" />
-                <span>Ongoing</span>
+                <span>{manga.status}</span>
               </div>
               <div className="flex items-center">
                 <Calendar className="w-5 h-5 mr-2" />
-                <span>1997 - Present</span>
+                <span>
+                  <span>{`${extractYear(manga.published.from)} - ${
+                    manga.published.to
+                      ? extractYear(manga.published.to)
+                      : 'Present'
+                  }`}</span>
+                </span>
               </div>
               <div className="flex items-center">
                 <span className="font-semibold mr-2">Genre:</span>
-                <span>{manga.genres.join(', ')}</span> {/* Display genres */}
+                <span>
+                  {manga.genres.map((genre) => genre.name).join(', ')}
+                </span>
               </div>
             </div>
             <LastChapters />
