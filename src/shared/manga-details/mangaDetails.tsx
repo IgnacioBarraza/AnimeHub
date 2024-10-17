@@ -7,16 +7,15 @@ import {
   Star,
 } from 'lucide-react'
 import { useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+import { LastChapters } from './components/lastChapters'
+import { categoriesDummy, Category, Manga } from '@/utils/interfaces' // Adjust the import based on your file structure
 
 export default function MangaDetails() {
   const [searchParams] = useSearchParams()
   const [scrollPosition, setScrollPosition] = useState(0)
-  // const navigate = useNavigate()
-  // Create a ref for the slider
   const sliderRef = useRef<HTMLDivElement | null>(null)
   const id = searchParams.get('id')
-  console.log(id)
 
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
@@ -25,74 +24,79 @@ export default function MangaDetails() {
       setScrollPosition(sliderRef.current.scrollLeft + scrollAmount)
     }
   }
+
+  const findMangaById = (
+    mangaData: Category[],
+    id: string | null
+  ): Manga | null => {
+    if (!id) return null // Return null if id is not provided
+
+    // Iterate through the data structure to find the manga by id
+    for (const category of mangaData) {
+      const manga = category.series.find((manga) => manga.id === id)
+      if (manga) return manga // Return the found manga
+    }
+
+    return null // Return null if not found
+  }
+
+  const manga = findMangaById(categoriesDummy, id)
+  console.log(manga)
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row gap-8 mx-auto">
-        <div className="md:w-1/3">
-          <img
-            src="/placeholder.svg"
-            alt="One Piece Manga Cover"
-            width={300}
-            height={450}
-            className="w-full rounded-lg shadow-lg"
-          />
-          <div className="mt-4 flex justify-between items-center">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-              Read Now
-            </button>
-            <div className="flex items-center">
-              <Star className="w-5 h-5 text-yellow-400 mr-1" />
-              <span className="font-bold">9.2</span>
+      {manga ? (
+        <div className="flex flex-col md:flex-row gap-8 mx-auto">
+          <div className="md:w-1/3">
+            <img
+              src={manga.imageUrl}
+              alt={`${manga.title} Manga Cover`}
+              width={300}
+              height={450}
+              className="w-full rounded-lg shadow-lg"
+            />
+            <div className="mt-4 flex justify-between items-center">
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+                Read Now
+              </button>
+              <div className="flex items-center">
+                <Star className="w-5 h-5 text-yellow-400 mr-1" />
+                <span className="font-bold">{manga.rating}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="md:w-2/3">
-          <h1 className="text-4xl font-bold mb-4">One Piece</h1>
-          <p className="text-gray-300 mb-4">
-            Follow the adventures of Monkey D. Luffy and his pirate crew in
-            their search for the ultimate treasure, the One Piece.
-          </p>
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="flex items-center">
-              <BookOpen className="w-5 h-5 mr-2" />
-              <span>1000+ chapters</span>
+          <div className="md:w-2/3">
+            <h1 className="text-4xl font-bold mb-4">{manga.title}</h1>
+            <p className="text-text-muted mb-4">
+              {`Follow the adventures of ${manga.title}...`}{' '}
+              {/* Update this description as needed */}
+            </p>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2" />
+                <span>{`${manga.genres.length} chapters`}</span>
+              </div>
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                <span>Ongoing</span>
+              </div>
+              <div className="flex items-center">
+                <Calendar className="w-5 h-5 mr-2" />
+                <span>1997 - Present</span>
+              </div>
+              <div className="flex items-center">
+                <span className="font-semibold mr-2">Genre:</span>
+                <span>{manga.genres.join(', ')}</span> {/* Display genres */}
+              </div>
             </div>
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              <span>Ongoing</span>
-            </div>
-            <div className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2" />
-              <span>1997 - Present</span>
-            </div>
-            <div className="flex items-center">
-              <span className="font-semibold mr-2">Genre:</span>
-              <span>Action, Adventure, Fantasy</span>
-            </div>
+            <LastChapters />
           </div>
-          <h2 className="text-2xl font-bold mb-2">Latest Chapters</h2>
-          <ul className="space-y-2">
-            <li className="bg-[#2A2A2A] p-3 rounded-lg flex justify-between items-center">
-              <span>Chapter 1000: The New Era</span>
-              <Link className="text-blue-400 hover:underline" to="#">
-                Read
-              </Link>
-            </li>
-            <li className="bg-[#2A2A2A] p-3 rounded-lg flex justify-between items-center">
-              <span>Chapter 999: The Sake I Brewed to Drink with You</span>
-              <Link className="text-blue-400 hover:underline" to="#">
-                Read
-              </Link>
-            </li>
-            <li className="bg-[#2A2A2A] p-3 rounded-lg flex justify-between items-center">
-              <span>Chapter 998: Ruffian Meets Ruffian</span>
-              <Link className="text-blue-400 hover:underline" to="#">
-                Read
-              </Link>
-            </li>
-          </ul>
         </div>
-      </div>
+      ) : (
+        <div className="text-center mt-8">
+          <h2 className="text-2xl font-bold">Manga Not Found</h2>
+        </div>
+      )}
       <div className="relative mt-12">
         <h2 className="text-2xl font-bold mb-4">Similar Manga</h2>
         <div
