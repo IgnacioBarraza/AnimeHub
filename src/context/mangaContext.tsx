@@ -97,8 +97,18 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
     try {
       const response = await axios.get(`${mangadex_base_url}/manga?title=${encodeURIComponent(title)}`)
       if (response.data.result === 'ok' && response.data.data.length > 0) {
-        return response.data.data[0].id
+        // Find the manga where the title matches exactly
+        const matchingManga = response.data.data.find(
+          (manga: { attributes: { title: { en: string } } }) =>
+            manga.attributes.title.en.toLowerCase() === title.toLowerCase()
+        )
+  
+        // If a match is found, return its id
+        if (matchingManga) {
+          return matchingManga.id
+        }
       }
+  
       return null
     } catch (error) {
       console.error('Failed to fetch MangaDex ID:', error)
@@ -165,7 +175,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
 
       switch (type) {
         case 'popular':
-          endpoint += 'order_by=popularity&sort=desc'
+          endpoint += 'order_by=popularity&sort=asc'
           break
         case 'top-rated':
           endpoint += 'order_by=score&sort=desc'
