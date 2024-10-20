@@ -265,3 +265,7 @@ export interface PaginationProps {
   totalPages: number
   onPageChange: (page: number) => void
 }
+
+export interface SkeletonLoaderProps {
+  title: string
+}

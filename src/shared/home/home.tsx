@@ -4,6 +4,7 @@ import { useTheme } from '@/hooks/themeHook'
 import { useMangaContext } from '@/hooks/mangaHook'
 import { useEffect, useState } from 'react'
 import { MangaDexData } from '@/utils/interfaces'
+import { SkeletonLoader } from './components/skeletonLoader'
 
 export default function Home() {
   const { theme } = useTheme()
@@ -12,9 +13,11 @@ export default function Home() {
   const [popularManga, setPopularManga] = useState<MangaDexData[]>([])
   const [newReleases, setNewReleases] = useState<MangaDexData[]>([])
   const [moreFollowed, setmoreFollowedManga] = useState<MangaDexData[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function fetchManga() {
+      setIsLoading(true)
       const popular = await getPopularManga()
       const newReleases = await getNewReleases()
       const moreFollowed = await getMoreFollowedManga()
@@ -22,6 +25,7 @@ export default function Home() {
       setPopularManga(popular)
       setNewReleases(newReleases)
       setmoreFollowedManga(moreFollowed)
+      setIsLoading(false)
     }
 
     fetchManga()
@@ -55,9 +59,21 @@ export default function Home() {
           />
         </div>
       </section>
-      <SeriesScroll title="Popular Manga" series={popularManga} />
-      <SeriesScroll title="New Releases" series={newReleases} />
-      <SeriesScroll title="Most Followed" series={moreFollowed} />
+      {isLoading ? (
+        <>
+          {/* Render the SkeletonLoader while loading */}
+          <SkeletonLoader title="Popular Manga" />
+          <SkeletonLoader title="New Releases" />
+          <SkeletonLoader title="Most Followed" />
+        </>
+      ) : (
+        <>
+          {/* Once the data is loaded, display the manga */}
+          <SeriesScroll title="Popular Manga" series={popularManga} />
+          <SeriesScroll title="New Releases" series={newReleases} />
+          <SeriesScroll title="Most Followed" series={moreFollowed} />
+        </>
+      )}
     </div>
   )
 }
