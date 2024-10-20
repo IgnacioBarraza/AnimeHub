@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '@/hooks/themeHook'
 import { useMangaContext } from '@/hooks/mangaHook'
 import { useEffect, useState } from 'react'
-import { Manga } from '@/utils/interfaces'
+import { MangaDexData } from '@/utils/interfaces'
 
 export default function Home() {
   const { theme } = useTheme()
   const { getPopularManga, getNewReleases, getTopRatedManga } =
     useMangaContext()
-  const [popularManga, setPopularManga] = useState<Manga[]>([])
-  const [newReleases, setNewReleases] = useState<Manga[]>([])
-  const [topRatedManga, setTopRatedManga] = useState<Manga[]>([])
+  const [popularManga, setPopularManga] = useState<MangaDexData[]>([])
+  const [newReleases, setNewReleases] = useState<MangaDexData[]>([])
+  const [topRatedManga, setTopRatedManga] = useState<MangaDexData[]>([])
 
   useEffect(() => {
     async function fetchManga() {
@@ -19,28 +19,9 @@ export default function Home() {
       const newReleases = await getNewReleases()
       const topRated = await getTopRatedManga()
 
-      // Filter out duplicate manga by mal_id
-      const uniquePopular = Array.from(
-        new Set(popular.map((manga) => manga.mal_id))
-      )
-        .map((id) => popular.find((manga) => manga.mal_id === id))
-        .filter((manga): manga is Manga => manga !== undefined) // Filter out undefined
-
-      const uniqueNewReleases = Array.from(
-        new Set(newReleases.map((manga) => manga.mal_id))
-      )
-        .map((id) => newReleases.find((manga) => manga.mal_id === id))
-        .filter((manga): manga is Manga => manga !== undefined) // Filter out undefined
-
-      const uniqueTopRated = Array.from(
-        new Set(topRated.map((manga) => manga.mal_id))
-      )
-        .map((id) => topRated.find((manga) => manga.mal_id === id))
-        .filter((manga): manga is Manga => manga !== undefined) // Filter out undefined
-
-      setPopularManga(uniquePopular)
-      setNewReleases(uniqueNewReleases)
-      setTopRatedManga(uniqueTopRated)
+      setPopularManga(popular)
+      setNewReleases(newReleases)
+      setTopRatedManga(topRated)
     }
 
     fetchManga()

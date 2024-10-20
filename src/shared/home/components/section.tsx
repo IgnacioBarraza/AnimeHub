@@ -1,5 +1,5 @@
-import { Manga } from '@/utils/interfaces' // Import Manga interface
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { MangaDexData } from '@/utils/interfaces' // Import Manga interface
+import { ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +8,7 @@ export default function SeriesScroll({
   series,
 }: {
   title: string
-  series: Manga[]
+  series: MangaDexData[]
 }) {
   const [scrollPosition, setScrollPosition] = useState(0)
   const navigate = useNavigate()
@@ -22,7 +22,7 @@ export default function SeriesScroll({
     }
   }
 
-  const goToMangaDetail = (id: number) => {
+  const goToMangaDetail = (id: string) => {
     navigate(`manga-details?id=${id}`)
   }
 
@@ -35,30 +35,45 @@ export default function SeriesScroll({
           className="flex space-x-4 overflow-x-auto scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {series.map((item) => (
-            <div key={item.mal_id} className="flex-none w-48">
-              <button
-                className="relative h-64 w-full mb-2"
-                onClick={() => goToMangaDetail(item.mal_id)}
-              >
-                <img
-                  src={item.images.jpg.image_url}
-                  alt={item.title}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </button>
-              <h3 className="font-semibold text-foreground">{item.title}</h3>
-              <div className="flex items-center">
-                <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                <span className="text-sm text-muted-foreground">
-                  {item.score?.toFixed(1) ?? 'N/A'}
-                </span>
+          {series.map((item) => {
+            const coverArt = item.relationships.find(
+              (rel) => rel.type === 'cover_art'
+            )?.attributes?.fileName
+
+            return (
+              <div key={item.id} className="flex-none w-48">
+                <button
+                  className="relative h-64 w-full mb-2"
+                  onClick={() => goToMangaDetail(item.id)}
+                >
+                  <img
+                    src={
+                      coverArt
+                        ? `https://uploads.mangadex.org/covers/${item.id}/${coverArt}`
+                        : '/placeholder.svg' // Fallback in case coverArt is undefined
+                    }
+                    alt={`${item.attributes.title.en} Manga Cover`}
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </button>
+                <h3 className="font-semibold text-foreground">
+                  {item.attributes.title.en}
+                </h3>
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 mr-1" />
+                  <span className="text-sm text-muted-foreground">
+                    {item.attributes.status}
+                  </span>
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {item.attributes.tags
+                    .slice(0, 3) // Limit to the first 3 tags
+                    .map((genre) => genre.attributes.name.en)
+                    .join(', ')}
+                </div>
               </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {item.genres.map((genre) => genre.name).join(', ')}
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
       <button

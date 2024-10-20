@@ -30,7 +30,7 @@ export const LastChapters = ({ mangaDexId }: LastChaptersProps) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Latest Chapters - English</h2>
+      <h2 className="text-2xl font-bold mb-2">Latest Chapters</h2>
       <ul className="space-y-2">
         {chapters.map((chapter) => (
           <li key={chapter.id} className="bg-background-light p-3 rounded-lg flex justify-between items-center">
