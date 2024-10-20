@@ -1,4 +1,5 @@
 import Auth from '@/auth/auth'
+import Credits from '@/shared/credits/credits'
 import Home from '@/shared/home/home'
 import Layout from '@/shared/layout'
 import MangaDetails from '@/shared/manga-details/mangaDetails'
@@ -23,6 +24,10 @@ const routes = [
         component: <MangaDetails />
       }
     ]
+  },
+  {
+    path: '/credits',
+    component: <Credits />
   },
   {
     path: '/not-found',

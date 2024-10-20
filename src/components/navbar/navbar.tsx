@@ -62,6 +62,7 @@ export default function Navbar() {
               <NavItem href="/anime-news">Anime News</NavItem>
               <NavItem href="/manga-news">Manga News</NavItem>
               <NavItem href="/help">Help</NavItem>
+              <NavItem href="/credits">Credits</NavItem>
             </nav>
 
             <div className="hidden md:flex items-center space-x-4">

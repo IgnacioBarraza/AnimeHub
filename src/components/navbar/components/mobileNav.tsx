@@ -30,6 +30,7 @@ export default function MobileNav({
           <NavItem href="/anime-news" onClick={handleLinkClick}>Anime News</NavItem>
           <NavItem href="/manga-news" onClick={handleLinkClick}>Manga News</NavItem>
           <NavItem href="/help" onClick={handleLinkClick}>Help</NavItem>
+          <NavItem href="/credits" onClick={handleLinkClick}>Credits</NavItem>
 
           <div className="relative" ref={dropdownRef}>
             <button
