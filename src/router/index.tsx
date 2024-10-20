@@ -37,8 +37,8 @@ export default function Router({ routes }: RouterProps) {
             <div className="min-h-screen bg-background text-text flex flex-col">
               <Navbar />
               <main
-                className="flex-grow overflow-y-auto"
-                style={{ height: 'calc(100vh - 128px)' }}
+                className="flex-grow overflow-y-auto px-4 py-12"
+                style={{ height: 'calc(80vh - 128px)' }}
               >
                 <Routes>
                   {renderRoutes(routes)}

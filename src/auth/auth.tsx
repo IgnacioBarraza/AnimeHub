@@ -5,7 +5,8 @@ import { Register } from './components/register'
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true)
   return (
-    <div className="flex w-full max-w-4xl bg-background-lighter rounded-lg shadow-lg overflow-hidden mx-auto">
+    <div className='flex items-center justify-center' style={{ height: 'calc(90vh - 128px)' }}>
+      <div className="flex w-full max-w-4xl bg-background-lighter rounded-lg shadow-lg overflow-hidden mx-auto">
       <div className="hidden md:block w-1/2 relative">
         <img src="/anime-placeholder.webp" alt="Anime character" />
       </div>
@@ -26,6 +27,7 @@ export default function Auth() {
           </p>
         </div>
       </div>
+    </div>
     </div>
   )
 }
