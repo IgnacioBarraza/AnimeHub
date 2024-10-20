@@ -259,3 +259,9 @@ export interface MangaInfoProps {
   manga: MangaDexData
   mangaDexId: string | null
 }
+
+export interface PaginationProps {
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+}

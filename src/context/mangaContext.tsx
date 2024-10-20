@@ -126,8 +126,9 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
 
     try {
       const response = await axios.get<LastChaptersResponse>(
-        `${mangadex_base_url}/chapter?manga=${mangaDexId}&order[publishAt]=desc&limit=4`
+        `${mangadex_base_url}/chapter?manga=${mangaDexId}&limit=20`
       )
+      console.log(response)
       if (response.data.result === 'ok') {
         const chapters = response.data.data || []
         setLastChaptersCache((prev) => ({ ...prev, [mangaDexId]: chapters }))
@@ -173,13 +174,13 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
       let endpointMangadex = `${mangadex_base_url}/manga?`
       switch (type) {
         case 'popular':
-          endpointMangadex += 'order[rating]=desc&includes[]=cover_art&limit=15'
+          endpointMangadex += 'order[rating]=desc&includes[]=cover_art&includes[]=author&limit=15'
           break
         case 'top-rated':
-          endpointMangadex += 'order[relevance]=desc&includes[]=cover_art&limit=15'
+          endpointMangadex += 'order[relevance]=desc&includes[]=cover_art&includes[]=author&limit=15'
           break
         case 'new-releases':
-          endpointMangadex += 'order[createdAt]=desc&includes[]=cover_art&limit=15'
+          endpointMangadex += 'order[createdAt]=desc&includes[]=cover_art&includes[]=author&limit=15'
           break
         default:
           return []
