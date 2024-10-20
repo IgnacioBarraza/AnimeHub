@@ -17,7 +17,7 @@ interface MangaContextProps {
   fetchMangaList: () => Promise<MangaDexData[]>
   searchManga: (query: string) => Promise<MangaDexData[]>
   getPopularManga: () => Promise<MangaDexData[]>
-  getTopRatedManga: () => Promise<MangaDexData[]>
+  getMoreFollowedManga: () => Promise<MangaDexData[]>
   getNewReleases: () => Promise<MangaDexData[]>
   getMangaDexIdByTitle: (title: string) => Promise<string | null>
   fetchLastChapters: (mangaDexId: string) => Promise<Chapter[]>
@@ -128,7 +128,6 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
       const response = await axios.get<LastChaptersResponse>(
         `${mangadex_base_url}/chapter?manga=${mangaDexId}&limit=20`
       )
-      console.log(response)
       if (response.data.result === 'ok') {
         const chapters = response.data.data || []
         setLastChaptersCache((prev) => ({ ...prev, [mangaDexId]: chapters }))
@@ -149,8 +148,8 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
     return fetchMangaData('popular')
   }
 
-  const getTopRatedManga = async (): Promise<MangaDexData[]> => {
-    return fetchMangaData('top-rated')
+  const getMoreFollowedManga = async (): Promise<MangaDexData[]> => {
+    return fetchMangaData('more-followed')
   }
 
   const getNewReleases = async (): Promise<MangaDexData[]> => {
@@ -166,7 +165,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
       now - cacheTimestamps[cacheKey] < 10 * 60 * 1000
     ) {
       if (type === 'popular') return popularManga
-      if (type === 'top-rated') return topRatedManga
+      if (type === 'more-followed') return topRatedManga
       if (type === 'new-releases') return newReleases
     }
 
@@ -176,8 +175,8 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
         case 'popular':
           endpointMangadex += 'order[rating]=desc&includes[]=cover_art&includes[]=author&limit=15'
           break
-        case 'top-rated':
-          endpointMangadex += 'order[relevance]=desc&includes[]=cover_art&includes[]=author&limit=15'
+        case 'more-followed':
+          endpointMangadex += 'order[followedCount]=desc&includes[]=cover_art&includes[]=author&limit=15'
           break
         case 'new-releases':
           endpointMangadex += 'order[createdAt]=desc&includes[]=cover_art&includes[]=author&limit=15'
@@ -191,7 +190,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
 
       if (type === 'popular') {
         setPopularManga(data)
-      } else if (type === 'top-rated') {
+      } else if (type === 'more-followed') {
         setTopRatedManga(data)
       } else if (type === 'new-releases') {
         setNewReleases(data)
@@ -224,7 +223,7 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
         fetchMangaList,
         searchManga,
         getPopularManga,
-        getTopRatedManga,
+        getMoreFollowedManga,
         getNewReleases,
         getMangaDexIdByTitle: fetchMangaDexIdByTitle,
         fetchLastChapters

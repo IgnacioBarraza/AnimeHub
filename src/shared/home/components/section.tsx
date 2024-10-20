@@ -52,12 +52,12 @@ export default function SeriesScroll({
                         ? `https://uploads.mangadex.org/covers/${item.id}/${coverArt}`
                         : '/placeholder.svg' // Fallback in case coverArt is undefined
                     }
-                    alt={`${item.attributes.title.en} Manga Cover`}
+                    alt={`${item.attributes.title.en || item.attributes.title['ja-ro']} Manga Cover`}
                     className="w-full h-full object-cover rounded-md"
                   />
                 </button>
                 <h3 className="font-semibold text-foreground">
-                  {item.attributes.title.en}
+                  {item.attributes.title.en || item.attributes.title['ja-ro']}
                 </h3>
                 <div className="flex items-center">
                   <Clock className="w-4 h-4 mr-1" />

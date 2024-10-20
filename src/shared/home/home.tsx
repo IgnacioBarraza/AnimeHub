@@ -7,25 +7,25 @@ import { MangaDexData } from '@/utils/interfaces'
 
 export default function Home() {
   const { theme } = useTheme()
-  const { getPopularManga, getNewReleases, getTopRatedManga } =
+  const { getPopularManga, getNewReleases, getMoreFollowedManga } =
     useMangaContext()
   const [popularManga, setPopularManga] = useState<MangaDexData[]>([])
   const [newReleases, setNewReleases] = useState<MangaDexData[]>([])
-  const [topRatedManga, setTopRatedManga] = useState<MangaDexData[]>([])
+  const [moreFollowed, setmoreFollowedManga] = useState<MangaDexData[]>([])
 
   useEffect(() => {
     async function fetchManga() {
       const popular = await getPopularManga()
       const newReleases = await getNewReleases()
-      const topRated = await getTopRatedManga()
+      const moreFollowed = await getMoreFollowedManga()
 
       setPopularManga(popular)
       setNewReleases(newReleases)
-      setTopRatedManga(topRated)
+      setmoreFollowedManga(moreFollowed)
     }
 
     fetchManga()
-  }, [getPopularManga, getNewReleases, getTopRatedManga])
+  }, [getPopularManga, getNewReleases, getMoreFollowedManga])
 
   return (
     <div className="w-10/12 mx-auto px-4 py-8">
@@ -57,7 +57,7 @@ export default function Home() {
       </section>
       <SeriesScroll title="Popular Manga" series={popularManga} />
       <SeriesScroll title="New Releases" series={newReleases} />
-      <SeriesScroll title="Top Rated" series={topRatedManga} />
+      <SeriesScroll title="Most Followed" series={moreFollowed} />
     </div>
   )
 }

@@ -49,3 +49,16 @@ export const languageTranslate: { [key: string]: string } = {
   'ja-ro': 'Japanese (Romanized)',
   ne: 'Nepali'
 }
+
+export const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'ongoing':
+      return 'text-green-500' // Green for ongoing
+    case 'completed':
+      return 'text-blue-500' // Blue for completed
+    case 'hiatus':
+      return 'text-amber-600' // Red for on hiatus
+    default:
+      return 'text-gray-500' // Default color if status is unknown
+  }
+}

@@ -2,7 +2,7 @@ import { Calendar, Clock, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LastChapters } from './lastChapters'
 import { MangaInfoProps } from '@/utils/interfaces'
-import { languageFlags, languageTranslate } from '@/utils/utils'
+import { getStatusColor, languageFlags, languageTranslate } from '@/utils/utils'
 import { Badge } from '@/components/ui/badge'
 import { useState } from 'react'
 
@@ -29,7 +29,7 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
               ? `https://uploads.mangadex.org/covers/${manga.id}/${coverArt}`
               : '/placeholder.svg'
           }
-          alt={`${manga.attributes.title.en} Manga Cover`}
+          alt={`${manga.attributes.title.en || manga.attributes.title['ja-ro']} Manga Cover`}
           className="w-full rounded-lg shadow-lg"
         />
         <div className="mt-4 flex justify-between items-center">
@@ -46,7 +46,7 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
         </div>
       </div>
       <div className="md:w-2/3">
-        <h1 className="text-4xl font-bold mb-4">{manga.attributes.title.en}</h1>
+        <h1 className="text-4xl font-bold mb-4">{manga.attributes.title.en || manga.attributes.title['ja-ro']}</h1>
         <div className="mt-4 mb-2">
           <p className="mb-2 text-xl">
             <strong>Authors:</strong>
@@ -84,8 +84,8 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
             </span>
           </div>
           <div className="flex items-end">
-            <Clock className="w-5 h-5 mr-2" />
-            <span>{manga.attributes.status || 'Unknow'}</span>
+            <Clock className={`w-5 h-5 mr-2 ${getStatusColor(manga.attributes.status)}`} />
+            <span>{manga.attributes.status || 'Unknown'}</span>
           </div>
           <div className="flex items-end mb-4">
             <span className="text-lg">Original language:</span>
@@ -112,17 +112,23 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
           <div className="flex flex-wrap gap-2 mt-2">
             {manga.attributes.altTitles.map((lang, index) => {
               const languageCode = Object.keys(lang)[0]
-              const flag = languageFlags[languageCode] || '🏳️'
-              return (
-                <Badge key={index} variant="secondary" className="text-sm">
-                  <img
-                    src={flag}
-                    alt={`${languageFlags[flag]} flag`}
-                    className="mr-2"
-                  />{' '}
-                  <span>{languageTranslate[languageCode]}</span>
-                </Badge>
-              )
+              const flag = languageFlags[languageCode]
+              const altTitle = lang[languageCode]
+
+              // Check if flag and translatedName are defined before rendering
+              if (flag && altTitle) {
+                return (
+                  <Badge key={index} variant="secondary" className="text-sm">
+                    <img
+                      src={flag}
+                      alt={`${languageCode} flag`}
+                      className="mr-2"
+                    />{' '}
+                    <span>{altTitle}</span>
+                  </Badge>
+                )
+              }
+              return null // Return null if flag or translatedName is undefined
             })}
           </div>
         </div>
