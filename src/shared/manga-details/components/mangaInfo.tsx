@@ -1,8 +1,8 @@
-import { Calendar, Clock, Globe } from 'lucide-react'
+import { Calendar, Clock } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LastChapters } from './lastChapters'
 import { MangaInfoProps } from '@/utils/interfaces'
-import { languageFlags } from '@/utils/utils'
+import { languageFlags, languageTranslate } from '@/utils/utils'
 import { Badge } from '@/components/ui/badge'
 
 export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
@@ -10,9 +10,7 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
     ?.attributes?.fileName
 
   const originalLanguageFlag =
-    languageFlags[manga.attributes.originalLanguage] || '🏳️'
-
-  // console.log(manga)
+    languageTranslate[manga.attributes.originalLanguage] || '🏳️'
 
   return (
     <div className="flex flex-col md:flex-row gap-8 mx-auto">
@@ -56,7 +54,8 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
             <span>{manga.attributes.status || 'Unknow'}</span>
           </div>
           <div className="flex items-end mb-4">
-            <Globe className="w-5 h-5 mr-2" />
+            <span className='text-lg'>Original language:</span>
+            <img src={languageFlags[manga.attributes.originalLanguage]} alt="" className='w-6 h-6 mr-1 ml-1'/>
             <span className="text-xl">{originalLanguageFlag}</span>
           </div>
         </div>
@@ -68,7 +67,6 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
               .join(', ')}
           </span>
         </div>
-        {/* Display the original language flag */}
         <div className="mt-4">
           <p>
             <strong>Available Languages:</strong>
@@ -79,30 +77,12 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
               const flag = languageFlags[languageCode] || '🏳️'
               return (
                 <Badge key={index} variant="secondary" className="text-sm">
-                  <img src={flag} alt={`${languageFlags[flag]} flag`} className='mr-2' /> {languageCode.toUpperCase()}
+                  <img src={flag} alt={`${languageFlags[flag]} flag`} className='mr-2' /> <span>{languageTranslate[languageCode]}</span>
                 </Badge>
               )
             })}
           </div>
         </div>
-
-        {/* Display alternative titles with flags */}
-        {/* {manga.attributes.altTitles?.length > 0 && (
-          <div className="mb-4">
-            <span className="font-semibold mr-2">Alternative Titles:</span>
-            <ul className="list-disc list-inside">
-              {manga.attributes.altTitles.map((title, index) => {
-                const languageCode = Object.keys(title)[0] // Assume the key is the language code
-                const flag = languageFlags[languageCode] || '🏳️'
-                return (
-                  <li key={index} className='text-lg'>
-                    {flag}: {title[languageCode]}
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )} */}
         {mangaDexId && <LastChapters mangaDexId={mangaDexId} />}
       </div>
     </div>
