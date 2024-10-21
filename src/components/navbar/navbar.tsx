@@ -101,6 +101,7 @@ export default function Navbar() {
                       <>
                         <Link
                           to="/login"
+                          onClick={toggleProfileDropdown}
                           className="block px-4 py-2 text-sm hover:bg-background-lighter"
                         >
                           Login
