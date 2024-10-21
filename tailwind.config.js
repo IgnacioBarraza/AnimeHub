@@ -83,6 +83,7 @@ export default {
           muted: "var(--color-text-muted)",
           light: "var(--color-text-light)",
           dark: "var(--color-text-dark)",
+          disabled: "var(--color-text-disabled)"
         },
         error: {
           DEFAULT: "var(--color-error)",

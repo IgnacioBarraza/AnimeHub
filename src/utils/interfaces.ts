@@ -269,3 +269,24 @@ export interface PaginationProps {
 export interface SkeletonLoaderProps {
   title: string
 }
+
+export interface RegisterFormData {
+  email: string
+  password: string
+}
+
+export interface RegisterStepsFormData extends RegisterFormData{
+  nickname: string
+  profilePicture: string | ArrayBuffer | null
+  favoriteGenres: string[]
+  languagePreference: string
+}
+
+export interface RegisterStepsProps {
+  email: string
+  password: string
+}
+
+export interface RegisterProps {
+  onSubmit: (email: string, password: string) => void
+}
