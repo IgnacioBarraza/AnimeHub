@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useMangaContext } from '@/hooks/mangaHook'
 import { MangaDexData } from '@/utils/interfaces'
 import { MangaInfo } from './components/mangaInfo'
@@ -18,8 +18,8 @@ export default function MangaDetails() {
       if (id) {
         const storedManga = getStoredMangaById(id)
         if (storedManga) setManga(storedManga)
-        setIsLoading(false)
       }
+      setIsLoading(false)
     }
     fetchManga()
   }, [id, getStoredMangaById, getMangaDexIdByTitle])
@@ -32,10 +32,16 @@ export default function MangaDetails() {
     )
   }
 
-  if (!manga) {
+  if (!manga || id === null) {
     return (
       <div className="text-center mt-8">
-        <h2 className="text-2xl font-bold">Manga Not Found</h2>
+        <h2 className="text-2xl font-bold mb-6">Manga Not Found</h2>
+        <Link
+          to="/manga"
+          className="px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary/90"
+        >
+          Browse manga
+        </Link>
       </div>
     )
   }

@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { CardContent, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function SkeletonLoader() {
   return (
-    <Card className="overflow-hidden">
+    <div className="overflow-hidden">
       <div className="md:flex">
         <div className="md:w-1/3">
           <Skeleton className="w-full h-[400px]" />
@@ -41,6 +41,6 @@ export function SkeletonLoader() {
           </CardContent>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }
