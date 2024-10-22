@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { NavItem } from './components/navItem'
 import { ThemeButton } from './components/themeButton'
 import AnimeHubLogo from './components/logo'
-import SearchComponent from './components/search'
 import { useLocationContext } from '@/hooks/locationHook'
 import MobileNav from './components/mobileNav'
 
@@ -66,7 +65,6 @@ export default function Navbar() {
             </nav>
 
             <div className="hidden md:flex items-center space-x-4">
-              <SearchComponent />
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={toggleProfileDropdown}

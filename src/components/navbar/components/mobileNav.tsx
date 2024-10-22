@@ -1,6 +1,5 @@
 import { ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import SearchComponent from './search'
 import { MobileNavProps } from '@/utils/interfaces'
 import { NavItem } from './navItem'
 import { ThemeButton } from './themeButton'
@@ -88,9 +87,6 @@ export default function MobileNav({
             )}
           </div>
         </nav>
-        <div className="mt-4">
-          <SearchComponent />
-        </div>
       </div>
     </div>
   )
