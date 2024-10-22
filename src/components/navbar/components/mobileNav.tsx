@@ -25,9 +25,9 @@ export default function MobileNav({
       <div className="container mx-auto px-4">
         <nav className="flex flex-col space-y-4">
           <NavItem href="/home" onClick={handleLinkClick}>Home</NavItem>
-          <NavItem href="/manga" onClick={handleLinkClick}>Manga</NavItem>
-          <NavItem href="/anime-news" onClick={handleLinkClick}>Anime News</NavItem>
-          <NavItem href="/manga-news" onClick={handleLinkClick}>Manga News</NavItem>
+          <NavItem href="/home/manga" onClick={handleLinkClick}>Manga</NavItem>
+          <NavItem href="/home/anime-news" onClick={handleLinkClick}>Anime News</NavItem>
+          <NavItem href="/home/manga-news" onClick={handleLinkClick}>Manga News</NavItem>
           <NavItem href="/help" onClick={handleLinkClick}>Help</NavItem>
           <NavItem href="/credits" onClick={handleLinkClick}>Credits</NavItem>
 

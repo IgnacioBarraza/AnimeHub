@@ -3,6 +3,7 @@ import Credits from '@/shared/credits/credits'
 import Home from '@/shared/home/home'
 import Layout from '@/shared/layout'
 import MangaDetails from '@/shared/manga-details/mangaDetails'
+import Manga from '@/shared/manga/manga'
 import Page404 from '@/shared/page404'
 import { Navigate } from 'react-router-dom'
 
@@ -22,6 +23,10 @@ const routes = [
       {
         path: 'manga-details',
         component: <MangaDetails />
+      },
+      {
+        path: 'manga',
+        component: <Manga />
       }
     ]
   },
