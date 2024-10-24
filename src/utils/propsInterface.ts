@@ -69,6 +69,7 @@ export interface RegisterProps {
 
 export interface MangaResultProps {
   manga: MangaDexData
+  searchQuery: string
 }
 
 export interface MangaFiltersProps {

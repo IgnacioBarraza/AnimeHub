@@ -1,5 +1,5 @@
 import { Calendar, Clock, User } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { LastChapters } from './lastChapters'
 import { MangaInfoProps } from '@/utils/propsInterface'
 import { getStatusColor, languageFlags, languageTranslate } from '@/utils/utils'
@@ -7,6 +7,9 @@ import { Badge } from '@/components/ui/badge'
 import { useState } from 'react'
 
 export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const [showFullDescription, setShowFullDescription] = useState(false)
   const descriptionLimit = 300
 
@@ -20,6 +23,17 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
   const originalLanguageFlag =
     languageTranslate[manga.attributes.originalLanguage] || '🏳️'
 
+  
+  const handleGoBack = () => {
+    const previousLocation = localStorage.getItem('prevLocation')
+    if (previousLocation) {
+      const decodedLocation = decodeURIComponent(previousLocation)
+      navigate(decodedLocation)
+    }
+  }
+
+  const hasSearchParam = new URLSearchParams(location.search).has('search')
+
   return (
     <div className="flex flex-col md:flex-row gap-8 mx-auto">
       <div className="md:w-1/3">
@@ -29,7 +43,9 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
               ? `https://uploads.mangadex.org/covers/${manga.id}/${coverArt}`
               : '/placeholder.svg'
           }
-          alt={`${manga.attributes.title.en || manga.attributes.title['ja-ro']} Manga Cover`}
+          alt={`${
+            manga.attributes.title.en || manga.attributes.title['ja-ro']
+          } Manga Cover`}
           className="w-full rounded-lg shadow-lg"
         />
         <div className="mt-4 flex justify-between items-center">
@@ -44,9 +60,19 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
             </Link>
           )}
         </div>
+        {hasSearchParam && (
+          <button
+            onClick={handleGoBack}
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300"
+          >
+            Go Back to Search
+          </button>
+        )}
       </div>
       <div className="md:w-2/3">
-        <h1 className="text-4xl font-bold mb-4">{manga.attributes.title.en || manga.attributes.title['ja-ro']}</h1>
+        <h1 className="text-4xl font-bold mb-4">
+          {manga.attributes.title.en || manga.attributes.title['ja-ro']}
+        </h1>
         <div className="mt-4 mb-2">
           <p className="mb-2 text-xl">
             <strong>Authors:</strong>
@@ -84,7 +110,11 @@ export const MangaInfo = ({ manga, mangaDexId }: MangaInfoProps) => {
             </span>
           </div>
           <div className="flex items-end">
-            <Clock className={`w-5 h-5 mr-2 ${getStatusColor(manga.attributes.status)}`} />
+            <Clock
+              className={`w-5 h-5 mr-2 ${getStatusColor(
+                manga.attributes.status
+              )}`}
+            />
             <span>{manga.attributes.status || 'Unknown'}</span>
           </div>
           <div className="flex items-end mb-4">

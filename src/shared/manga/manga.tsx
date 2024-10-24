@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import MangaResult from './components/mangaResult'
 import Filters from './components/filters'
 import SearchBar from './components/search'
+import { useLocation } from 'react-router-dom'
 
 export default function Manga() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -18,7 +19,7 @@ export default function Manga() {
   const [error, setError] = useState<string | null>(null)
 
   const { searchManga } = useMangaContext()
-
+  const location = useLocation()
 
   const toggleGenre = (genreId: string) => {
     setSelectedGenres(prev => 
@@ -46,10 +47,60 @@ export default function Manga() {
   }
 
   useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchQuery) {
+        searchMangaQuery()
+      }
+    }, 500)
+  
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchQuery, selectedGenres, selectedStatus, selectedDemographic, sortBy])
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams()
     if (searchQuery) {
+      queryParams.set('search', searchQuery)
+    }
+    if (selectedGenres.length) {
+      queryParams.set('genres', selectedGenres.join(','))
+    }
+    if (selectedStatus.length) {
+      queryParams.set('status', selectedStatus.join(','))
+    }
+    if (selectedDemographic.length) {
+      queryParams.set('demographic', selectedDemographic.join(','))
+    }
+    if (sortBy) {
+      queryParams.set('sort', sortBy)
+    }
+    
+    const newUrl = `${window.location.pathname}?${queryParams.toString()}`
+  
+    // Store the URL as a plain string in localStorage
+    window.history.replaceState(null, '', newUrl)
+    localStorage.setItem('prevLocation', encodeURIComponent(newUrl))
+  }, [searchQuery, selectedGenres, selectedStatus, selectedDemographic, sortBy])
+  
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search)
+    const search = urlParams.get('search') || ''
+    const genres = urlParams.get('genres')?.split(',') || []
+    const status = urlParams.get('status')?.split(',') || []
+    const demographic = urlParams.get('demographic')?.split(',') || []
+    const sort = urlParams.get('sort') || 'relevance'
+
+    setSearchQuery(search)
+    setSelectedGenres(genres)
+    setSelectedStatus(status)
+    setSelectedDemographic(demographic)
+    setSortBy(sort)
+  
+    if (search) {
       searchMangaQuery()
     }
-  }, [searchQuery, selectedGenres, selectedStatus, selectedDemographic, sortBy])
+  }, [])
+  
 
   const searchMangaQuery = async () => {
     setIsLoading(true)
@@ -109,7 +160,7 @@ export default function Manga() {
             {isLoading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {searchResults.map((manga) => (
-              <MangaResult manga={manga} key={manga.id}/>
+              <MangaResult manga={manga} key={manga.id} searchQuery={searchQuery}/>
             ))}
             {searchResults.length === 0 && !isLoading && !error && (
               <p>No results found. Try adjusting your search or filters.</p>

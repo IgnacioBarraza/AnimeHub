@@ -3,8 +3,7 @@ import { MangaResultProps } from '@/utils/propsInterface'
 import { Book } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-export default function MangaResult(manga: MangaResultProps) {
-  const mangaData = manga.manga
+export default function MangaResult({manga, searchQuery}: MangaResultProps) {
   const getCoverImage = (manga: MangaDexData) => {
     const coverArt = manga.relationships.find((rel) => rel.type === 'cover_art')
     return coverArt
@@ -13,29 +12,29 @@ export default function MangaResult(manga: MangaResultProps) {
   }
 
   return (
-    <Link to={`/home/manga-details?id=${mangaData.id}`}>
+    <Link to={`/home/manga-details?search=${searchQuery}&id=${manga.id}`}>
       <div
-        key={mangaData.id}
+        key={manga.id}
         className="bg-background-light p-4 rounded-md mb-4 flex items-center"
       >
         <img
-          src={getCoverImage(mangaData)}
-          alt={mangaData.attributes.title.en || 'Manga cover'}
+          src={getCoverImage(manga)}
+          alt={manga.attributes.title.en || 'Manga cover'}
           width={60}
           height={80}
           className="mr-4 rounded object-cover"
         />
         <div className="flex-grow">
           <h3 className="font-semibold">
-            {mangaData.attributes.title.en || 'Unknown Title'}
+            {manga.attributes.title.en || 'Unknown Title'}
           </h3>
           <div className="flex items-center text-sm text-gray-400">
             <Book className="w-4 h-4 mr-1" />
-            <span>{mangaData.type}</span>
-            {mangaData.attributes.status && (
+            <span>{manga.type}</span>
+            {manga.attributes.status && (
               <>
                 <span className="mx-2">•</span>
-                <span>{mangaData.attributes.status}</span>
+                <span>{manga.attributes.status}</span>
               </>
             )}
           </div>
