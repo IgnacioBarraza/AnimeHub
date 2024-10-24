@@ -15,7 +15,7 @@ interface MangaContextProps {
   getMangaById: (id: string) => Promise<MangaDexData | null>
   getStoredMangaById: (id: string) => MangaDexData | null
   fetchMangaList: () => Promise<MangaDexData[]>
-  searchManga: (query: string) => Promise<MangaDexData[]>
+  searchManga: (searchQuery: string, selectedGenres: string[], selectedStatus: string[], selectedDemographic: string[], sortBy: string) => Promise<MangaDexData[]>
   getPopularManga: () => Promise<MangaDexData[]>
   getMoreFollowedManga: () => Promise<MangaDexData[]>
   getNewReleases: () => Promise<MangaDexData[]>
@@ -75,11 +75,35 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
     return fetchMangaData('popular')
   }
 
-  const searchManga = async (query: string): Promise<MangaDexData[]> => {
+  const searchManga = async (searchQuery: string, selectedGenres: string[], selectedStatus: string[], selectedDemographic: string[], sortBy: string): Promise<MangaDexData[]> => {
     try {
-      const response = await axios.get<MangadexApiResponse>(
-        `${jikan_base_url}/manga?q=${query}`
-      )
+      let url = `${mangadex_base_url}/manga?title=${searchQuery}&limit=10&includes[]=cover_art&includes[]=author`
+      
+      if (selectedGenres.length > 0) {
+        selectedGenres.forEach(genreId => {
+          url += `&includedTags[]=${genreId}`
+        })
+      }
+
+      if (selectedStatus.length > 0) {
+        selectedStatus.forEach(status => {
+          url += `&status[]=${status}`
+        })
+      }
+
+      if (selectedDemographic.length > 0) {
+        selectedDemographic.forEach(demographicId => {
+          if (demographicId !== 'none') {
+            url += `&includedTags[]=${demographicId}`
+          }
+        })
+      }
+
+      if (sortBy !== 'relevance') {
+        url += `&order[${sortBy}]=desc`
+      }
+      
+      const response = await axios.get<MangadexApiResponse>(url)
       const searchResults = response.data.data
       searchResults.forEach((manga) => {
         setCachedData((prev) => ({ ...prev, [manga.id]: manga }))

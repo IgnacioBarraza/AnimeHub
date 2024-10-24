@@ -290,3 +290,19 @@ export interface RegisterStepsProps {
 export interface RegisterProps {
   onSubmit: (email: string, password: string) => void
 }
+
+export interface MangaResultProps {
+  manga: MangaDexData
+}
+
+export interface MangaFiltersProps {
+  selectedGenres: string[]
+  selectedStatus: string[]
+  selectedDemographic: string[]
+  sortBy: string
+  clearFilters: () => void
+  toggleGenre: (id: string) => void
+  toggleStatus: (status: string) => void
+  toggleDemographics: (id: string) => void
+  setSortBy: (sortBy: string) => void
+}
