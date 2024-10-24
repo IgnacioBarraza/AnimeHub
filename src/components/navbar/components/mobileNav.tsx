@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { MobileNavProps } from '@/utils/interfaces'
+import { MobileNavProps } from '@/utils/propsInterface'
 import { NavItem } from './navItem'
 import { ThemeButton } from './themeButton'
 

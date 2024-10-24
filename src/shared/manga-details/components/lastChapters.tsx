@@ -1,8 +1,9 @@
 import { useMangaContext } from '@/hooks/mangaHook'
-import { LastChaptersProps, Chapter } from '@/utils/interfaces'
+import { Chapter } from '@/utils/interfaces'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Pagination } from './paginator'
+import { LastChaptersProps } from '@/utils/propsInterface'
 
 const CHAPTERS_PER_PAGE = 4
 

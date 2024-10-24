@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import { RegisterFormData, RegisterProps } from '@/utils/interfaces'
+import { RegisterFormData } from '@/utils/interfaces'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { RegisterProps } from '@/utils/propsInterface'
 
 export default function Register({ onSubmit }: RegisterProps) {
   const [showPassword, setShowPassword] = useState(false)

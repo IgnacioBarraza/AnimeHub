@@ -1,5 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
-import { SkeletonLoaderProps } from '@/utils/interfaces'
+import { SkeletonLoaderProps } from '@/utils/propsInterface'
 
 export const SkeletonLoader = ({title}: SkeletonLoaderProps) => {
   return (

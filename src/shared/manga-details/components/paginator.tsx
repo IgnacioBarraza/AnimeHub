@@ -1,4 +1,4 @@
-import { PaginationProps } from '@/utils/interfaces'
+import { PaginationProps } from '@/utils/propsInterface'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 export const Pagination = ({ currentPage, onPageChange, totalPages }: PaginationProps) => {

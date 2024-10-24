@@ -1,7 +1,7 @@
 import { Calendar, Clock, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LastChapters } from './lastChapters'
-import { MangaInfoProps } from '@/utils/interfaces'
+import { MangaInfoProps } from '@/utils/propsInterface'
 import { getStatusColor, languageFlags, languageTranslate } from '@/utils/utils'
 import { Badge } from '@/components/ui/badge'
 import { useState } from 'react'

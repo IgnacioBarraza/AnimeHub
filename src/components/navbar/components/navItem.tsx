@@ -1,4 +1,4 @@
-import { NavItemProps } from '@/utils/interfaces'
+import { NavItemProps } from '@/utils/propsInterface'
 import { Link, useLocation } from 'react-router-dom'
 
 export const NavItem = ({ href, children, onClick }: NavItemProps) => {

@@ -1,4 +1,4 @@
-import { ProtectedRouteProps } from '@/utils/interfaces'
+import { ProtectedRouteProps } from '@/utils/propsInterface'
 import { useEffect } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 

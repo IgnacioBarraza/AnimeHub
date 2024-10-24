@@ -2,11 +2,11 @@ import axios from 'axios'
 import { createContext, useState, useEffect } from 'react'
 import {
   Chapter,
-  ContextProviderProps,
   LastChaptersResponse,
   MangadexApiResponse,
   MangaDexData,
 } from '@/utils/interfaces'
+import { ContextProviderProps } from '@/utils/propsInterface'
 
 const jikan_base_url = 'https://api.jikan.moe/v4'
 const mangadex_base_url = 'https://api.mangadex.org'

@@ -1,5 +1,5 @@
 import { useTheme } from '@/hooks/themeHook'
-import { ThemeButtonProps } from '@/utils/interfaces'
+import { ThemeButtonProps } from '@/utils/propsInterface'
 import { Moon, Sun } from 'lucide-react'
 
 export const ThemeButton = ({ onClick }: ThemeButtonProps) => {

@@ -1,4 +1,4 @@
-import { MangaFiltersProps } from '@/utils/interfaces'
+import { MangaFiltersProps } from '@/utils/propsInterface'
 
 export default function Filters({ sortBy, clearFilters, selectedDemographic, selectedGenres, selectedStatus, setSortBy, toggleGenre, toggleStatus, toggleDemographics }: MangaFiltersProps) {
   const genres = [

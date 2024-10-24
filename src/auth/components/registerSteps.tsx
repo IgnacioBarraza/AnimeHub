@@ -1,4 +1,5 @@
-import { RegisterStepsFormData, RegisterStepsProps } from '@/utils/interfaces'
+import { RegisterStepsFormData } from '@/utils/interfaces'
+import { RegisterStepsProps } from '@/utils/propsInterface'
 import { Check, ChevronLeft, ChevronRight, Upload, User } from 'lucide-react'
 import { ChangeEvent, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'

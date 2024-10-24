@@ -1,12 +1,13 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import Page404 from '@/shared/page404'
 import ProtectedRoute from '@/routes/protectedRoute'
-import { RouteConfig, RouterProps } from '@/utils/interfaces'
+import { RouteConfig } from '@/utils/interfaces'
 import Navbar from '@/components/navbar/navbar'
 import { ThemeProvider } from '@/context/themeContext'
 import { LocationProvider } from '@/context/locationContext'
 import Footer from '@/components/footer/footer'
 import { MangaProvider } from '@/context/mangaContext'
+import { RouterProps } from '@/utils/propsInterface'
 
 export default function Router({ routes }: RouterProps) {
   // Function to recursively render routes

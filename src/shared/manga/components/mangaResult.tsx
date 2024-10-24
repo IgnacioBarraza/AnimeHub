@@ -1,4 +1,5 @@
-import { MangaDexData, MangaResultProps } from '@/utils/interfaces'
+import { MangaDexData } from '@/utils/interfaces'
+import { MangaResultProps } from '@/utils/propsInterface'
 import { Book } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
