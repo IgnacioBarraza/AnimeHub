@@ -122,30 +122,116 @@ export interface RegisterStepsFormData extends RegisterFormData{
   languagePreference: string
 }
 
-export interface AnimeResult {
+export interface AnimeData {
   mal_id: number
+  url: string
+  images: {
+    jpg: ImageFormat
+    webp: ImageFormat
+  }
+  trailer: Trailer
+  approved: boolean
+  titles: Title[]
   title: string
-  images: Images
-  synopsis: string
-  score: number
-  episodes: number
+  title_english: string
+  title_japanese: string
+  title_synonyms: string[]
+  type: string
+  source: string
+  episodes: number | null
+  status: string
   airing: boolean
+  aired: {
+    from: string
+    to: string | null
+    prop: {
+      from: DateProp
+      to: DateProp
+    }
+    string: string
+  }
+  duration: string
+  rating: string
+  score: number
+  scored_by: number
+  rank: number
+  popularity: number
+  members: number
+  favorites: number
+  synopsis: string
+  background: string
+  season: string
+  year: number
+  broadcast: Broadcast
+  producers: Producer[]
+  licensors: Producer[]
+  studios: Producer[]
+  genres: Genre[]
+  explicit_genres: Genre[]
+  themes: Genre[]
+  demographics: Genre[]
+  theme: {
+    openings: string[]
+    endings: string[]
+  }
+}
+
+interface ImageFormat {
+  image_url: string
+  small_image_url: string
+  large_image_url: string
+}
+
+interface Trailer {
+  youtube_id: string
+  url: string
+  embed_url: string
+  images: {
+    image_url: string
+    small_image_url: string
+    medium_image_url: string
+    large_image_url: string
+    maximum_image_url: string
+  }
+}
+
+interface Title {
+  type: string
+  title: string
+}
+
+interface DateProp {
+  day: number | null
+  month: number | null
+  year: number | null
+}
+
+interface Broadcast {
+  day: string
+  time: string
+  timezone: string
+  string: string
+}
+
+interface Producer {
+  mal_id: number
+  type: string
+  name: string
+  url: string
 }
 
 export interface Genre {
   mal_id: number
+  type: string
   name: string
+  url: string
 }
 
-interface Images {
-  jpg: {
-    image_url: string
-    small_image_url: string
-    large_image_url: string
-  }
-  webp: {
-    image_url: string
-    small_image_url: string
-    large_image_url: string
-  }
+export interface JikanMoeApiResponse {
+  result: string
+  response: string
+  data: AnimeData[]
+  limit: number
+  offset: number
+  total: number
 }

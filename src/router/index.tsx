@@ -8,6 +8,7 @@ import { LocationProvider } from '@/context/locationContext'
 import Footer from '@/components/footer/footer'
 import { MangaProvider } from '@/context/mangaContext'
 import { RouterProps } from '@/utils/propsInterface'
+import { AnimeProvider } from '@/context/animeContext'
 
 export default function Router({ routes }: RouterProps) {
   // Function to recursively render routes
@@ -34,21 +35,23 @@ export default function Router({ routes }: RouterProps) {
     <BrowserRouter>
       <ThemeProvider>
         <LocationProvider>
-          <MangaProvider>
-            <div className="min-h-screen bg-background text-text flex flex-col">
-              <Navbar />
-              <main
-                className="flex-grow overflow-y-auto px-4 py-12"
-                style={{ height: 'calc(80vh - 128px)' }}
-              >
-                <Routes>
-                  {renderRoutes(routes)}
-                  <Route path="*" element={<Page404 />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </MangaProvider>
+          <AnimeProvider>
+            <MangaProvider>
+              <div className="min-h-screen bg-background text-text flex flex-col">
+                <Navbar />
+                <main
+                  className="flex-grow overflow-y-auto px-4 py-12"
+                  style={{ height: 'calc(80vh - 128px)' }}
+                >
+                  <Routes>
+                    {renderRoutes(routes)}
+                    <Route path="*" element={<Page404 />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </MangaProvider>
+          </AnimeProvider>
         </LocationProvider>
       </ThemeProvider>
     </BrowserRouter>
