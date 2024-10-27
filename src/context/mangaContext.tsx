@@ -8,18 +8,15 @@ import {
 } from '@/utils/interfaces'
 import { ContextProviderProps } from '@/utils/propsInterface'
 
-const jikan_base_url = 'https://api.jikan.moe/v4'
 const mangadex_base_url = 'https://api.mangadex.org'
 
 interface MangaContextProps {
-  getMangaById: (id: string) => Promise<MangaDexData | null>
   getStoredMangaById: (id: string) => MangaDexData | null
   fetchMangaList: () => Promise<MangaDexData[]>
   searchManga: (searchQuery: string, selectedGenres: string[], selectedStatus: string[], selectedDemographic: string[], sortBy: string) => Promise<MangaDexData[]>
   getPopularManga: () => Promise<MangaDexData[]>
   getMoreFollowedManga: () => Promise<MangaDexData[]>
   getNewReleases: () => Promise<MangaDexData[]>
-  getMangaDexIdByTitle: (title: string) => Promise<string | null>
   fetchLastChapters: (mangaDexId: string) => Promise<Chapter[]>
 }
 
@@ -55,20 +52,6 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
       JSON.stringify(cacheTimestamps)
     )
   }, [cachedData, cacheTimestamps])
-
-  const fetchMangaById = async (id: string): Promise<MangaDexData | null> => {
-    if (cachedData[id]) return cachedData[id]
-
-    try {
-      const response = await axios.get<MangaDexData>(`${jikan_base_url}/manga/${id}`)
-      const manga = response.data
-      setCachedData((prev) => ({ ...prev, [id]: manga }))
-      return manga
-    } catch (error) {
-      console.error('Failed to fetch manga: ', error)
-      return null
-    }
-  }
 
   const fetchMangaList = async (): Promise<MangaDexData[]> => {
     if (popularManga.length > 0) return popularManga
@@ -112,34 +95,6 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
     } catch (error) {
       console.error('Failed to search manga:', error)
       return []
-    }
-  }
-
-  const normalizeTitle = (title: string): string => {
-    return title
-      .toLowerCase()
-      .replace(/[\s-]+/g, '-')
-      .replace(/[^\w-]/g, '')
-  }
-
-  const fetchMangaDexIdByTitle = async (title: string): Promise<string | null> => {
-    try {
-      const response = await axios.get(`${mangadex_base_url}/manga?title=${encodeURIComponent(title)}`)
-      if (response.data.result === 'ok' && response.data.data.length > 0) {
-        const matchingManga = response.data.data.find(
-          (manga: { attributes: { title: { en: string } } }) =>
-            normalizeTitle(manga.attributes.title.en) === normalizeTitle(title)
-        )
-  
-        if (matchingManga) {
-          return matchingManga.id
-        }
-      }
-  
-      return null
-    } catch (error) {
-      console.error('Failed to fetch MangaDex ID:', error)
-      return null
     }
   }
 
@@ -242,14 +197,12 @@ export const MangaProvider = ({ children }: ContextProviderProps) => {
   return (
     <MangaContext.Provider
       value={{
-        getMangaById: fetchMangaById,
         getStoredMangaById,
         fetchMangaList,
         searchManga,
         getPopularManga,
         getMoreFollowedManga,
         getNewReleases,
-        getMangaDexIdByTitle: fetchMangaDexIdByTitle,
         fetchLastChapters
       }}
     >

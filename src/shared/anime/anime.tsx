@@ -4,22 +4,25 @@ import {
 } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AnimeResult } from '@/utils/interfaces'
+import { AnimeData } from '@/utils/interfaces'
 import { AlertCircle, ChevronDown, Filter } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Filters from './components/filters'
 import SearchBar from './components/searchBar'
 import AnimeResults from './components/animeResults'
+import { useAnimeContext } from '@/hooks/animeHook'
 
 export default function Anime() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [animeResults, setAnimeResults] = useState<AnimeResult[]>([])
+  const [animeResults, setAnimeResults] = useState<AnimeData[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedGenres, setSelectedGenres] = useState<number[]>([])
+  const [selectedType, setSelectedType] = useState<string[]>([])
   const [status, setStatus] = useState<string>('all')
   const [rating, setRating] = useState<string>('all')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const { searchAnime } = useAnimeContext()
 
   const searchAnimeQuery = async () => {
     if (!searchQuery.trim()) return
@@ -28,42 +31,8 @@ export default function Anime() {
     setError(null)
 
     try {
-      let url = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(
-        searchQuery
-      )}&limit=10`
-
-      if (selectedGenres.length > 0) {
-        url += `&genres=${selectedGenres.join(',')}`
-      }
-
-      if (status !== 'all') {
-        url += `&status=${status}`
-      }
-
-      if (rating !== 'all') {
-        url += `&rating=${rating}`
-      }
-
-      const response = await fetch(url)
-      const data = await response.json()
-
-      if (data.data) {
-        setAnimeResults(
-          data.data.map(
-            (anime: AnimeResult) => ({
-              mal_id: anime.mal_id,
-              title: anime.title,
-              images: anime.images,
-              synopsis: anime.synopsis,
-              score: anime.score,
-              episodes: anime.episodes,
-              airing: anime.airing,
-            })
-          )
-        )
-      } else {
-        setAnimeResults([])
-      }
+      const response = await searchAnime(searchQuery, selectedGenres, status, rating, selectedType)
+      setAnimeResults(response)
     } catch (err) {
       console.error(err)
       setError('Failed to fetch anime data. Please try again later.')
@@ -80,7 +49,52 @@ export default function Anime() {
     }, 500)
   
     return () => clearTimeout(delayDebounceFn)
-  }, [searchQuery, selectedGenres, status, rating])
+  }, [searchQuery, selectedGenres, status, rating, selectedType])
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams()
+    if (searchQuery) {
+      queryParams.set('search', searchQuery)
+    }
+    if (selectedGenres.length) {
+      queryParams.set('genres', selectedGenres.join(','))
+    }
+    if (selectedType.length) {
+      queryParams.set('type', selectedType.join(','))
+    }
+    if (status) {
+      queryParams.set('status', status)
+    }
+    if (rating) {
+      queryParams.set('rating', rating)
+    }
+    
+    const newUrl = `${window.location.pathname}?${queryParams.toString()}`
+  
+    // Store the URL as a plain string in localStorage
+    window.history.replaceState(null, '', newUrl)
+    localStorage.setItem('prevLocation', encodeURIComponent(newUrl))
+  }, [searchQuery, selectedGenres, status, rating, selectedType])
+  
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search)
+    const search = urlParams.get('search') || ''
+    const genres = (urlParams.get('genres')?.split(',') || []).map(Number) 
+    const type = urlParams.get('type')?.split(',') || []
+    const status = urlParams.get('status') || 'all'
+    const rating = urlParams.get('rating') || 'all'
+
+    setSearchQuery(search)
+    setSelectedGenres(genres)
+    setSelectedType(type)
+    setRating(rating)
+    setStatus(status)
+  
+    if (search) {
+      searchAnimeQuery()
+    }
+  }, [])
 
   const toggleGenre = (genreId: number) => {
     setSelectedGenres((prev) =>
@@ -90,8 +104,15 @@ export default function Anime() {
     )
   }
 
+  const toggleType = (type: string) => {
+    setSelectedType(prev => 
+      prev.includes(type) ? prev.filter(s => s !== type) : [...prev, type]
+    )
+  }
+
   const clearFilters = () => {
     setSelectedGenres([])
+    setSelectedType([])
     setStatus('all')
     setRating('all')
   }
@@ -122,10 +143,12 @@ export default function Anime() {
             {isFilterOpen && (
               <Filters
                 selectedGenres={selectedGenres}
+                selectedType={selectedType}
                 status={status}
                 rating={rating}
                 clearFilters={clearFilters}
                 toggleGenre={toggleGenre}
+                toggleType={toggleType}
                 setStatus={setStatus}
                 setRating={setRating}
               />
