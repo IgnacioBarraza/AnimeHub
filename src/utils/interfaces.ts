@@ -121,3 +121,31 @@ export interface RegisterStepsFormData extends RegisterFormData{
   favoriteGenres: string[]
   languagePreference: string
 }
+
+export interface AnimeResult {
+  mal_id: number
+  title: string
+  images: Images
+  synopsis: string
+  score: number
+  episodes: number
+  airing: boolean
+}
+
+export interface Genre {
+  mal_id: number
+  name: string
+}
+
+interface Images {
+  jpg: {
+    image_url: string
+    small_image_url: string
+    large_image_url: string
+  }
+  webp: {
+    image_url: string
+    small_image_url: string
+    large_image_url: string
+  }
+}

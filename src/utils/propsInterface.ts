@@ -1,5 +1,5 @@
 import { ReactNode, RefObject } from 'react'
-import { MangaDexData, RouteConfig } from './interfaces'
+import { AnimeResult, MangaDexData, RouteConfig } from './interfaces'
 import { Location } from 'react-router-dom'
 
 
@@ -87,4 +87,19 @@ export interface MangaFiltersProps {
 export interface SearchBarProps {
   searchQuery: string
   setSearchQuery: (query: string) => void
+}
+
+export interface AnimeFiltersProps {
+  selectedGenres: number[]
+  status: string
+  rating: string
+  clearFilters: () => void
+  toggleGenre: (genre: number) => void
+  setStatus: (status: string) => void
+  setRating: (rating: string) => void
+}
+
+export interface AnimeResultProps {
+  anime: AnimeResult
+  searchQuery: string
 }

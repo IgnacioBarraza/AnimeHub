@@ -57,9 +57,8 @@ export default function Navbar() {
           <>
             <nav className="hidden md:flex space-x-4">
               <NavItem href="/home">Home</NavItem>
-              <NavItem href="/home/manga">Manga</NavItem>
-              <NavItem href="/home/anime-news">Anime News</NavItem>
-              <NavItem href="/home/manga-news">Manga News</NavItem>
+              <NavItem href="/home/manga">Search manga</NavItem>
+              <NavItem href="/home/anime">Search anime</NavItem>
               <NavItem href="/help">Help</NavItem>
               <NavItem href="/credits">Credits</NavItem>
             </nav>

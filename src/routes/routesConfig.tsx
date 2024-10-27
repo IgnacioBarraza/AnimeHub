@@ -1,4 +1,5 @@
 import Auth from '@/auth/auth'
+import Anime from '@/shared/anime/anime'
 import Credits from '@/shared/credits/credits'
 import Home from '@/shared/home/home'
 import Layout from '@/shared/layout'
@@ -27,6 +28,10 @@ const routes = [
       {
         path: 'manga',
         component: <Manga />
+      },
+      {
+        path: 'anime',
+        component: <Anime />
       }
     ]
   },

@@ -150,7 +150,7 @@ export default function Manga() {
                 selectedDemographic={selectedDemographic}
                 selectedGenres={selectedGenres}
                 selectedStatus={selectedStatus}
-                />
+              />
             )}
           </div>
         </div>
