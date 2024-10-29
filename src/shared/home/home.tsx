@@ -1,10 +1,11 @@
-import SeriesScroll from './components/section'
 import { Link } from 'react-router-dom'
 import { useTheme } from '@/hooks/themeHook'
 import { useMangaContext } from '@/hooks/mangaHook'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense, lazy } from 'react'
 import { MangaDexData } from '@/utils/interfaces'
 import { SkeletonLoader } from './components/skeletonLoader'
+
+const SeriesScroll = lazy(() => import('./components/section'))
 
 export default function Home() {
   const { theme } = useTheme()
@@ -67,12 +68,11 @@ export default function Home() {
           <SkeletonLoader title="Most Followed" />
         </>
       ) : (
-        <>
-          {/* Once the data is loaded, display the manga */}
+        <Suspense fallback={<SkeletonLoader title="Loading series..." />} >
           <SeriesScroll title="Popular Manga" series={popularManga} />
           <SeriesScroll title="New Releases" series={newReleases} />
           <SeriesScroll title="Most Followed" series={moreFollowed} />
-        </>
+        </Suspense>
       )}
     </div>
   )

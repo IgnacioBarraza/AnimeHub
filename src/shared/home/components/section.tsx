@@ -53,7 +53,7 @@ export default function SeriesScroll({
                         : '/placeholder.svg' // Fallback in case coverArt is undefined
                     }
                     alt={`${item.attributes.title.en || item.attributes.title['ja-ro']} Manga Cover`}
-                    className="w-full h-full object-cover rounded-md"
+                    className="w-full h-full rounded"
                   />
                 </button>
                 <h3 className="font-semibold text-foreground">

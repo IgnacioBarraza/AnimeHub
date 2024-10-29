@@ -9,7 +9,7 @@ export default function MangaDetails() {
   const [searchParams] = useSearchParams()
   const [manga, setManga] = useState<MangaDexData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const { getStoredMangaById, getMangaDexIdByTitle } = useMangaContext()
+  const { getStoredMangaById } = useMangaContext()
   const id = searchParams.get('id')
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function MangaDetails() {
       setIsLoading(false)
     }
     fetchManga()
-  }, [id, getStoredMangaById, getMangaDexIdByTitle])
+  }, [id, getStoredMangaById])
 
   if (isLoading) {
     return (

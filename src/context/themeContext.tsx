@@ -1,4 +1,4 @@
-import { ContextProviderProps } from '@/utils/interfaces'
+import { ContextProviderProps } from '@/utils/propsInterface'
 import { createContext, useState, useEffect } from 'react'
 
 interface ThemeContextProps {

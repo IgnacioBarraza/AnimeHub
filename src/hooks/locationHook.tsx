@@ -1,5 +1,5 @@
 import { LocationContext } from '@/context/locationContext'
-import { LocationContextProps } from '@/utils/interfaces'
+import { LocationContextProps } from '@/utils/propsInterface'
 import { useContext } from 'react'
 
 export const useLocationContext = (): LocationContextProps => {
