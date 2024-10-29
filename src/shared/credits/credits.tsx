@@ -7,7 +7,7 @@ export default function Credits() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Credits</h1>
       <div className="grid gap-8 md:grid-cols-2">
-        <Card>
+        <Card className='bg-background-light border-none'>
           <CardHeader>
             <CardTitle className="text-2xl">MangaDex</CardTitle>
             <CardDescription>Manga Information Provider</CardDescription>
@@ -17,8 +17,8 @@ export default function Credits() {
               We extend our heartfelt gratitude to MangaDex for providing their comprehensive manga database API. 
               Their service has been instrumental in bringing you accurate and up-to-date manga information.
             </p>
-            <Button asChild>
-              <a href="https://mangadex.org" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
+            <Button asChild className='bg-orange-500 hover:bg-orange-700'>
+              <a href="https://mangadex.org" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-black">
                 Visit MangaDex
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
@@ -26,7 +26,7 @@ export default function Credits() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className='bg-background-light border-none'>
           <CardHeader>
             <CardTitle className="text-2xl">Jikan Moe</CardTitle>
             <CardDescription>Anime Information Provider</CardDescription>
