@@ -28,17 +28,17 @@ export default function Credits() {
 
         <Card className='bg-background-light border-none'>
           <CardHeader>
-            <CardTitle className="text-2xl">Jikan Moe</CardTitle>
+            <CardTitle className="text-2xl">AniList</CardTitle>
             <CardDescription>Anime Information Provider</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              We're deeply appreciative of Jikan Moe for their excellent anime database API. 
+              We're deeply appreciative of AniList for their excellent anime database API. 
               Their service has been crucial in providing our users with rich and detailed anime information.
             </p>
             <Button asChild>
-              <a href="https://jikan.moe" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
-                Visit Jikan Moe
+              <a href="https://anilist.co/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
+                Visit AniList
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
             </Button>
@@ -51,14 +51,14 @@ export default function Credits() {
         <p className="max-w-2xl mx-auto">
           Otaku Oasis is dedicated to providing a comprehensive platform for anime and manga enthusiasts. 
           We strive to offer accurate and up-to-date information to our users, and this wouldn't be possible 
-          without the support of services like MangaDex and Jikan Moe. We encourage our users to visit and 
+          without the support of services like MangaDex and AniList. We encourage our users to visit and 
           support these platforms directly.
         </p>
       </div>
 
       <footer className="mt-12 text-center text-sm text-muted-foreground">
         <p>© {new Date().getFullYear()} Otaku Oasis. All rights reserved.</p>
-        <p>Anime and manga data provided by MangaDex and Jikan Moe.</p>
+        <p>Anime and manga data provided by MangaDex and AniList.</p>
       </footer>
     </div>
   )
