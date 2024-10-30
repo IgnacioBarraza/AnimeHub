@@ -235,3 +235,18 @@ export interface JikanMoeApiResponse {
   offset: number
   total: number
 }
+
+export interface AniListAnimeData {
+  id: number
+  title: {
+    romaji: string
+    english?: string
+  }
+  coverImage: {
+    large: string
+  }
+  averageScore?: number
+  episodes?: number
+  genres?: string[]
+  status?: 'FINISHED' | 'RELEASING' | 'NOT_YET_RELEASED' | 'CANCELLED'
+}

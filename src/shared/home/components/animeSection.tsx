@@ -1,14 +1,14 @@
-import { MangaDexData } from '@/utils/interfaces' // Import Manga interface
+import { AniListAnimeData } from '@/utils/interfaces'
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function SeriesScroll({
+export default function AnimeSeriesScroll({
   title,
   series,
 }: {
   title: string
-  series: MangaDexData[]
+  series: AniListAnimeData[]
 }) {
   const [scrollPosition, setScrollPosition] = useState(0)
   const navigate = useNavigate()
@@ -22,10 +22,10 @@ export default function SeriesScroll({
     }
   }
 
-  const goToMangaDetail = (id: string) => {
-    navigate(`manga-details?id=${id}`)
+  const goToAnimeDetail = (id: number) => {
+    navigate(`anime-details?id=${id}`)
   }
-
+  
   return (
     <div className="relative mb-8">
       <h2 className="text-2xl font-bold mb-4 text-foreground">{title}</h2>
@@ -36,40 +36,29 @@ export default function SeriesScroll({
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {series.map((item) => {
-            const coverArt = item.relationships.find(
-              (rel) => rel.type === 'cover_art'
-            )?.attributes?.fileName
-
             return (
               <div key={item.id} className="flex-none w-48">
                 <button
                   className="relative h-64 w-full mb-2"
-                  onClick={() => goToMangaDetail(item.id)}
+                  onClick={() => goToAnimeDetail(item.id)}
                 >
                   <img
-                    src={
-                      coverArt
-                        ? `https://uploads.mangadex.org/covers/${item.id}/${coverArt}`
-                        : '/placeholder.svg' // Fallback in case coverArt is undefined
-                    }
-                    alt={`${item.attributes.title.en || item.attributes.title['ja-ro']} Manga Cover`}
+                    src={item.coverImage.large}
+                    alt={`${item.title.english || item.title.romaji} Manga Cover`}
                     className="w-full h-full rounded"
                   />
                 </button>
                 <h3 className="font-semibold text-foreground">
-                  {item.attributes.title.en || item.attributes.title['ja-ro']}
+                  {item.title.english || item.title.romaji}
                 </h3>
                 <div className="flex items-center">
                   <Clock className="w-4 h-4 mr-1" />
                   <span className="text-sm text-muted-foreground">
-                    {item.attributes.status}
+                    {item.status}
                   </span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {item.attributes.tags
-                    .slice(0, 3) // Limit to the first 3 tags
-                    .map((genre) => genre.attributes.name.en)
-                    .join(', ')}
+                  {item.genres?.slice(0, 3).map((genre) => genre).join(', ')}
                 </div>
               </div>
             )

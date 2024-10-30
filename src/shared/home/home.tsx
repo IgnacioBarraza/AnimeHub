@@ -2,18 +2,24 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '@/hooks/themeHook'
 import { useMangaContext } from '@/hooks/mangaHook'
 import { useEffect, useState, Suspense, lazy } from 'react'
-import { MangaDexData } from '@/utils/interfaces'
+import { AniListAnimeData, MangaDexData } from '@/utils/interfaces'
 import { SkeletonLoader } from './components/skeletonLoader'
+import { useAnimeContext } from '@/hooks/animeHook'
 
-const SeriesScroll = lazy(() => import('./components/section'))
+const MangaSeriesScroll = lazy(() => import('./components/mangaSection'))
+const AnimeSeriesScroll = lazy(() => import('./components/animeSection'))
 
 export default function Home() {
   const { theme } = useTheme()
   const { getPopularManga, getNewReleases, getMoreFollowedManga } =
     useMangaContext()
+  const { getNewAnimeReleases, getPopularAnime, getTopRatedAnime } = useAnimeContext()
   const [popularManga, setPopularManga] = useState<MangaDexData[]>([])
   const [newReleases, setNewReleases] = useState<MangaDexData[]>([])
   const [moreFollowed, setmoreFollowedManga] = useState<MangaDexData[]>([])
+  const [newAnimeReleases, setNewAnimeReleases] = useState<AniListAnimeData[]>([])
+  const [popularAnime, setPopularAnime] = useState<AniListAnimeData[]>([])
+  const [mostRatedAnime, setMostRatedAnime] = useState<AniListAnimeData[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -22,15 +28,21 @@ export default function Home() {
       const popular = await getPopularManga()
       const newReleases = await getNewReleases()
       const moreFollowed = await getMoreFollowedManga()
+      const newAnimeReleases = await getNewAnimeReleases()
+      const popularAnime = await getPopularAnime()
+      const ratedAnime = await getTopRatedAnime()
 
       setPopularManga(popular)
       setNewReleases(newReleases)
       setmoreFollowedManga(moreFollowed)
+      setNewAnimeReleases(newAnimeReleases)
+      setPopularAnime(popularAnime)
+      setMostRatedAnime(ratedAnime)
       setIsLoading(false)
     }
 
     fetchManga()
-  }, [getPopularManga, getNewReleases, getMoreFollowedManga])
+  }, [getPopularManga, getNewReleases, getMoreFollowedManga, getNewAnimeReleases, getPopularAnime, getTopRatedAnime])
 
   return (
     <div className="w-10/12 mx-auto px-4 py-8">
@@ -62,16 +74,21 @@ export default function Home() {
       </section>
       {isLoading ? (
         <>
-          {/* Render the SkeletonLoader while loading */}
           <SkeletonLoader title="Popular Manga" />
-          <SkeletonLoader title="New Releases" />
-          <SkeletonLoader title="Most Followed" />
+          <SkeletonLoader title="Popular Anime" />
+          <SkeletonLoader title="New Manga Releases" />
+          <SkeletonLoader title="New Anime Releases" />
+          <SkeletonLoader title="Most Followed Manga" />
+          <SkeletonLoader title="Top Rated Anime" />
         </>
       ) : (
         <Suspense fallback={<SkeletonLoader title="Loading series..." />} >
-          <SeriesScroll title="Popular Manga" series={popularManga} />
-          <SeriesScroll title="New Releases" series={newReleases} />
-          <SeriesScroll title="Most Followed" series={moreFollowed} />
+          <MangaSeriesScroll title="Popular Manga" series={popularManga} />
+          <AnimeSeriesScroll title="Popular Anime" series={popularAnime} />
+          <MangaSeriesScroll title="New Manga Releases" series={newReleases} />
+          <AnimeSeriesScroll title="New Anime Releases" series={newAnimeReleases} />
+          <MangaSeriesScroll title="Most Followed Manga" series={moreFollowed} />
+          <AnimeSeriesScroll title="Top Rated Anime" series={mostRatedAnime} />
         </Suspense>
       )}
     </div>
