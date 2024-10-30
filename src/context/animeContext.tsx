@@ -1,7 +1,7 @@
   import axios from 'axios'
   import { createContext, useState, useEffect } from 'react'
   import { ContextProviderProps } from '@/utils/propsInterface'
-  import { AniListAnimeData } from '@/utils/interfaces'
+  import { AniListAnimeData, GenreResponse, statusMap, ValidAnimeStatus, ValidAnimeTypes, validTypes } from '@/utils/interfaces'
 
   const anilist_base_url = 'https://graphql.anilist.co'
 
@@ -10,12 +10,13 @@
     searchAnime: (
       searchQuery: string,
       selectedGenres: number[],
-      status: string,
-      selectedType: string[]
+      status: ValidAnimeStatus,
+      selectedType: ValidAnimeTypes[]
     ) => Promise<AniListAnimeData[]>
     getPopularAnime: () => Promise<AniListAnimeData[]>
     getNewAnimeReleases: () => Promise<AniListAnimeData[]>
     getTopRatedAnime: () => Promise<AniListAnimeData[]>
+    getAnimeGenres: () => Promise<GenreResponse | null>
   }
 
   export const AnimeContext = createContext<AnimeContextProps | undefined>(
@@ -61,7 +62,7 @@
               english
               native
             }
-            description(asHtml: false)
+            description
             trailer {
               id
               site
@@ -125,19 +126,24 @@
     const searchAnime = async (
       searchQuery: string,
       selectedGenres: number[],
-      status: string,
-      selectedType: string[]
+      status: ValidAnimeStatus,
+      selectedType: ValidAnimeTypes[] // Ensure selectedType is of the union type
     ): Promise<AniListAnimeData[]> => {
-      const genresFilter = selectedGenres.length > 0 ? `genre_in: [${selectedGenres.map(genre => `"${genre}"`).join(', ')}]` : ''
-      const statusFilter = status !== 'all' ? `status: ${status.toUpperCase()}` : ''
-      const formatFilter = selectedType.length > 0 ? `format_in: [${selectedType.map(type => `"${type.toUpperCase()}"`).join(', ')}]` : ''
+      const genresFilter = selectedGenres.length > 0 
+        ? `genre_in: [${selectedGenres.map(genre => `"${genre}"`).join(', ')}]` 
+        : ''
+
+    const statusFilter = statusMap[status] ? `status: ${statusMap[status]}` : ''
+    
+      const formatFilter = selectedType.length > 0 
+        ? `format_in: [${selectedType.map(type => `${validTypes[type]}`).join(', ')}]` 
+        : ''
     
       const query = `
         query {
           Page(page: 1, perPage: 15) {
             media(
               type: ANIME,
-              isAdult: false,
               search: "${searchQuery}",
               ${genresFilter},
               ${statusFilter},
@@ -145,11 +151,15 @@
             ) {
               id
               title { romaji english }
-              coverImage { large }
+              coverImage { 
+                large
+                extraLarge 
+              }
               averageScore
               episodes
               genres
               status
+              description
             }
           }
         }
@@ -171,7 +181,6 @@
         return []
       }
     }
-    
 
     const fetchFromAniList = async (query: string): Promise<AniListAnimeData[]> => {
       try {
@@ -194,11 +203,15 @@
             media(type: ANIME, sort: POPULARITY_DESC, isAdult: false) {
               id
               title { romaji english }
-              coverImage { large }
+              coverImage { 
+                large
+                extraLarge
+              }
               averageScore
               episodes
               genres
               status
+              description
             }
           }
         }
@@ -213,11 +226,15 @@
             media(type: ANIME, sort: START_DATE_DESC, status: RELEASING, isAdult: false) {
               id
               title { romaji english }
-              coverImage { large }
+              coverImage { 
+                large
+                extraLarge
+              }
               averageScore
               episodes
               genres
               status
+              description
             }
           }
         }
@@ -237,11 +254,31 @@
               episodes
               genres
               status
+              description
             }
           }
         }
       `
       return await fetchFromAniList(query)
+    }
+
+    const getAnimeGenres = async (): Promise<GenreResponse | null> => {
+      const query = `
+      query {
+        GenreCollection
+      }
+    `
+      try {
+        const response = await axios.post<GenreResponse>(anilist_base_url,
+          { query },
+          { headers: { 'Content-Type': 'application/json' }}
+        )
+        const data = await response.data
+        return data
+      } catch (err) {
+        console.error('Failed to fetch genres:', err)
+        return null
+      }
     }
 
     return (
@@ -252,6 +289,7 @@
           getPopularAnime,
           getNewAnimeReleases,
           getTopRatedAnime,
+          getAnimeGenres
         }}
       >
         {children}

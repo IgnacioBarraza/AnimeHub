@@ -1,5 +1,5 @@
 import { ReactNode, RefObject } from 'react'
-import { AnimeData, MangaDexData, RouteConfig } from './interfaces'
+import { AniListAnimeData, MangaDexData, RouteConfig, ValidAnimeStatus, ValidAnimeTypes } from './interfaces'
 import { Location } from 'react-router-dom'
 
 
@@ -91,17 +91,15 @@ export interface SearchBarProps {
 
 export interface AnimeFiltersProps {
   selectedGenres: number[]
-  selectedType: string[]
-  status: string
-  rating: string
+  selectedType: ValidAnimeTypes[]
+  status: ValidAnimeStatus
   clearFilters: () => void
   toggleGenre: (genre: number) => void
-  toggleType: (status: string) => void
-  setStatus: (status: string) => void
-  setRating: (rating: string) => void
+  toggleType: (type: ValidAnimeTypes) => void
+  setStatus: (status: ValidAnimeStatus) => void
 }
 
 export interface AnimeResultProps {
-  anime: AnimeData
+  anime: AniListAnimeData
   searchQuery: string
 }

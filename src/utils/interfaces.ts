@@ -122,119 +122,11 @@ export interface RegisterStepsFormData extends RegisterFormData{
   languagePreference: string
 }
 
-export interface AnimeData {
-  mal_id: number
-  url: string
-  images: {
-    jpg: ImageFormat
-    webp: ImageFormat
-  }
-  trailer: Trailer
-  approved: boolean
-  titles: Title[]
-  title: string
-  title_english: string
-  title_japanese: string
-  title_synonyms: string[]
-  type: string
-  source: string
-  episodes: number | null
-  status: string
-  airing: boolean
-  aired: {
-    from: string
-    to: string | null
-    prop: {
-      from: DateProp
-      to: DateProp
-    }
-    string: string
-  }
-  duration: string
-  rating: string
-  score: number
-  scored_by: number
-  rank: number
-  popularity: number
-  members: number
-  favorites: number
-  synopsis: string
-  background: string
-  season: string
-  year: number
-  broadcast: Broadcast
-  producers: Producer[]
-  licensors: Producer[]
-  studios: Producer[]
-  genres: Genre[]
-  explicit_genres: Genre[]
-  themes: Genre[]
-  demographics: Genre[]
-  theme: {
-    openings: string[]
-    endings: string[]
-  }
-}
-
-interface ImageFormat {
-  image_url: string
-  small_image_url: string
-  large_image_url: string
-}
-
-interface Trailer {
-  youtube_id: string
-  url: string
-  embed_url: string
-  images: {
-    image_url: string
-    small_image_url: string
-    medium_image_url: string
-    large_image_url: string
-    maximum_image_url: string
-  }
-}
-
-interface Title {
-  type: string
-  title: string
-}
-
-interface DateProp {
-  day: number | null
-  month: number | null
-  year: number | null
-}
-
-interface Broadcast {
-  day: string
-  time: string
-  timezone: string
-  string: string
-}
-
-interface Producer {
-  mal_id: number
-  type: string
-  name: string
-  url: string
-}
-
 export interface Genre {
-  mal_id: number
-  type: string
+  id: number
   name: string
-  url: string
 }
 
-export interface JikanMoeApiResponse {
-  result: string
-  response: string
-  data: AnimeData[]
-  limit: number
-  offset: number
-  total: number
-}
 
 export interface AniListAnimeData {
   id: number
@@ -244,9 +136,44 @@ export interface AniListAnimeData {
   }
   coverImage: {
     large: string
+    extraLarge: string
   }
   averageScore?: number
   episodes?: number
   genres?: string[]
-  status?: 'FINISHED' | 'RELEASING' | 'NOT_YET_RELEASED' | 'CANCELLED'
+  status: 'FINISHED' | 'RELEASING' | 'NOT_YET_RELEASED' | 'CANCELLED'
+  description?: string
 }
+
+export type ValidAnimeTypes = 'tv' | 'tv_short' | 'movie' | 'special' | 'ova' | 'ona' | 'music'
+export type ValidAnimeStatus = 'RELEASING' | 'FINISHED' | 'NOT_YET_RELEASED' | 'CANCELLED'
+
+export const validTypes: Record<ValidAnimeTypes, string> = {
+  tv: 'TV',
+  tv_short: 'TV_SHORT',
+  movie: 'MOVIE',
+  special: 'SPECIAL',
+  ova: 'OVA',
+  ona: 'ONA',
+  music: 'MUSIC',
+}
+
+export const statusMap: { [key: string]: ValidAnimeStatus } = {
+  CURRENT: 'RELEASING',
+  FINISHED: 'FINISHED',
+  NOT_YET_AIRED: 'NOT_YET_RELEASED',
+  CANCELED: 'CANCELLED',
+}
+
+// Interface for the main API response
+interface AniListResponse<T> {
+  data: T
+}
+
+// Interface for the genre collection data
+interface GenreCollectionData {
+  GenreCollection: string[] // Array of genres as strings
+}
+
+// Combine them to define the full response type
+export type GenreResponse = AniListResponse<GenreCollectionData>

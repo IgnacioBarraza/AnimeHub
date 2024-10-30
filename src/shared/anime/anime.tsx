@@ -1,10 +1,7 @@
-import {
-  CardContent,
-  CardHeader,
-} from '@/components/ui/card'
+import { CardContent, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AnimeData } from '@/utils/interfaces'
+import { AniListAnimeData, ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
 import { AlertCircle, ChevronDown, Filter } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Filters from './components/filters'
@@ -14,13 +11,12 @@ import { useAnimeContext } from '@/hooks/animeHook'
 
 export default function Anime() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [animeResults, setAnimeResults] = useState<AnimeData[]>([])
+  const [animeResults, setAnimeResults] = useState<AniListAnimeData[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedGenres, setSelectedGenres] = useState<number[]>([])
-  const [selectedType, setSelectedType] = useState<string[]>([])
-  const [status, setStatus] = useState<string>('all')
-  const [rating, setRating] = useState<string>('all')
+  const [selectedType, setSelectedType] = useState<ValidAnimeTypes[]>([])
+  const [status, setStatus] = useState<ValidAnimeStatus>('RELEASING')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const { searchAnime } = useAnimeContext()
 
@@ -31,7 +27,12 @@ export default function Anime() {
     setError(null)
 
     try {
-      const response = await searchAnime(searchQuery, selectedGenres, status, rating, selectedType)
+      const response = await searchAnime(
+        searchQuery,
+        selectedGenres,
+        status,
+        selectedType
+      )
       setAnimeResults(response)
     } catch (err) {
       console.error(err)
@@ -47,9 +48,9 @@ export default function Anime() {
         searchAnimeQuery()
       }
     }, 500)
-  
+
     return () => clearTimeout(delayDebounceFn)
-  }, [searchQuery, selectedGenres, status, rating, selectedType])
+  }, [searchQuery, selectedGenres, status, selectedType])
 
   useEffect(() => {
     const queryParams = new URLSearchParams()
@@ -65,32 +66,25 @@ export default function Anime() {
     if (status) {
       queryParams.set('status', status)
     }
-    if (rating) {
-      queryParams.set('rating', rating)
-    }
-    
+
     const newUrl = `${window.location.pathname}?${queryParams.toString()}`
-  
-    // Store the URL as a plain string in localStorage
+
     window.history.replaceState(null, '', newUrl)
     localStorage.setItem('prevLocation', encodeURIComponent(newUrl))
-  }, [searchQuery, selectedGenres, status, rating, selectedType])
-  
+  }, [searchQuery, selectedGenres, status, selectedType])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
     const search = urlParams.get('search') || ''
-    const genres = (urlParams.get('genres')?.split(',') || []).map(Number) 
-    const type = urlParams.get('type')?.split(',') || []
-    const status = urlParams.get('status') || 'all'
-    const rating = urlParams.get('rating') || 'all'
+    const genres = (urlParams.get('genres')?.split(',') || []).map(Number)
+    const type = (urlParams.get('type')?.split(',') || []) as ValidAnimeTypes[]
+    const status = (urlParams.get('status') || 'RELEASING') as ValidAnimeStatus
 
     setSearchQuery(search)
     setSelectedGenres(genres)
     setSelectedType(type)
-    setRating(rating)
     setStatus(status)
-  
+
     if (search) {
       searchAnimeQuery()
     }
@@ -104,17 +98,16 @@ export default function Anime() {
     )
   }
 
-  const toggleType = (type: string) => {
-    setSelectedType(prev => 
-      prev.includes(type) ? prev.filter(s => s !== type) : [...prev, type]
+  const toggleType = (type: ValidAnimeTypes) => {
+    setSelectedType((prev) =>
+      prev.includes(type) ? prev.filter((s) => s !== type) : [...prev, type]
     )
   }
 
   const clearFilters = () => {
     setSelectedGenres([])
     setSelectedType([])
-    setStatus('all')
-    setRating('all')
+    setStatus('RELEASING')
   }
 
   return (
@@ -123,7 +116,10 @@ export default function Anime() {
       <div className="flex flex-col md:flex-row gap-6">
         <div className="md:w-1/3">
           <div className="bg-background-lighter p-6 rounded-lg shadow-lg">
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
             <div className="mb-4">
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -145,46 +141,53 @@ export default function Anime() {
                 selectedGenres={selectedGenres}
                 selectedType={selectedType}
                 status={status}
-                rating={rating}
                 clearFilters={clearFilters}
                 toggleGenre={toggleGenre}
                 toggleType={toggleType}
                 setStatus={setStatus}
-                setRating={setRating}
               />
             )}
           </div>
         </div>
         <div className="md:w-2/3">
           <ScrollArea className="h-[730px]">
-            {isLoading ? (
-              Array(3)
-                .fill(0)
-                .map((_, index) => (
-                  <div key={index} className="bg-background-light rounded-md mb-4">
-                    <CardHeader>
-                      <Skeleton className="h-4 w-[250px]" />
-                      <Skeleton className="h-4 w-[200px]" />
-                    </CardHeader>
-                    <CardContent>
-                      <Skeleton className="h-[100px] w-full" />
-                    </CardContent>
-                  </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {isLoading ? (
+                Array(3)
+                  .fill(0)
+                  .map((_, index) => (
+                    <div
+                      key={index}
+                      className="bg-background-light rounded-md mb-4"
+                    >
+                      <CardHeader>
+                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-[200px]" />
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-[100px] w-full" />
+                      </CardContent>
+                    </div>
+                  ))
+              ) : error ? (
+                <div className="text-red-500 flex items-center">
+                  <AlertCircle className="mr-2" />
+                  {error}
+                </div>
+              ) : animeResults.length > 0 ? (
+                animeResults.map((anime) => (
+                  <AnimeResults
+                    anime={anime}
+                    searchQuery={searchQuery}
+                    key={anime.id}
+                  />
                 ))
-            ) : error ? (
-              <div className="text-red-500 flex items-center">
-                <AlertCircle className="mr-2" />
-                {error}
-              </div>
-            ) : animeResults.length > 0 ? (
-              animeResults.map((anime) => (
-                <AnimeResults anime={anime} searchQuery={searchQuery} key={anime.mal_id} />
-              ))
-            ) : (
-              <p className="text-center text-muted-foreground">
-                No results found. Try adjusting your search or filters.
-              </p>
-            )}
+              ) : (
+                <p className="text-center text-muted-foreground">
+                  No results found. Try adjusting your search or filters.
+                </p>
+              )}
+            </div>
           </ScrollArea>
         </div>
       </div>

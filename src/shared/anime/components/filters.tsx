@@ -1,6 +1,7 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Genre } from '@/utils/interfaces'
+import { useAnimeContext } from '@/hooks/animeHook'
+import { Genre, ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
 import { AnimeFiltersProps } from '@/utils/propsInterface'
 import { useEffect, useState } from 'react'
 
@@ -11,21 +12,26 @@ export default function Filters({
   setStatus,
   toggleType,
   status,
-  rating,
-  setRating,
   clearFilters,
 }: AnimeFiltersProps) {
+  const { getAnimeGenres } = useAnimeContext()
   const [genres, setGenres] = useState<Genre[]>([])
-  const type = [
-    { name: 'Tv', id: 'tv' },
+
+  const types: { name: string; id: ValidAnimeTypes }[] = [
+    { name: 'TV', id: 'tv' },
     { name: 'Movie', id: 'movie' },
-    { name: 'Ova', id: 'ova' },
+    { name: 'OVA', id: 'ova' },
     { name: 'Special', id: 'special' },
-    { name: 'Ona', id: 'ona' },
+    { name: 'ONA', id: 'ona' },
     { name: 'Music', id: 'music' },
-    { name: 'Cm', id: 'cm' },
-    { name: 'Pv', id: 'pv' },
-    { name: 'Tv Special', id: 'tv_special' },
+  ]
+
+  // Updated statuses according to AniList API
+  const statuses = [
+    { name: 'Currently Airing', id: 'RELEASING' },
+    { name: 'Finished Airing', id: 'FINISHED' },
+    { name: 'Not Yet Aired', id: 'NOT_YET_RELEASED' },
+    { name: 'Canceled', id: 'CANCELLED' },
   ]
 
   useEffect(() => {
@@ -33,12 +39,16 @@ export default function Filters({
   }, [])
 
   const fetchGenres = async () => {
-    try {
-      const response = await fetch('https://api.jikan.moe/v4/genres/anime')
-      const data = await response.json()
-      setGenres(data.data)
-    } catch (err) {
-      console.error('Failed to fetch genres:', err)
+    const response = await getAnimeGenres()
+    if (response) {
+      const fetchedGenres = response.data.GenreCollection
+      if (Array.isArray(fetchedGenres)) {
+        const genreObjects: Genre[] = fetchedGenres.map((genre, index) => ({
+          id: index,
+          name: genre,
+        }))
+        setGenres(genreObjects)
+      }
     }
   }
 
@@ -49,16 +59,16 @@ export default function Filters({
         <ScrollArea className="h-[200px]">
           {genres.map((genre) => (
             <div
-              key={genre.mal_id}
+              key={genre.id}
               className="flex items-center space-x-2 mb-2"
             >
               <Checkbox
-                id={`genre-${genre.mal_id}`}
-                checked={selectedGenres.includes(genre.mal_id)}
-                onCheckedChange={() => toggleGenre(genre.mal_id)}
+                id={`genre-${genre.id}`}
+                checked={selectedGenres.includes(genre.id)}
+                onCheckedChange={() => toggleGenre(genre.id)}
               />
               <label
-                htmlFor={`genre-${genre.mal_id}`}
+                htmlFor={`genre-${genre.id}`}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {genre.name}
@@ -70,7 +80,7 @@ export default function Filters({
       <div>
         <h3 className="font-semibold mb-2">Type</h3>
         <div className="grid grid-cols-2 gap-2">
-          {type.map((type) => (
+          {types.map((type) => (
             <button
               key={type.id}
               onClick={() => toggleType(type.id)}
@@ -89,28 +99,14 @@ export default function Filters({
         <h3 className="font-semibold mb-2 text-text">Status</h3>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          onChange={(e) => setStatus(e.target.value as ValidAnimeStatus)}
           className="w-full bg-background-light text-text px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="all">All</option>
-          <option value="airing">Airing</option>
-          <option value="complete">Completed</option>
-          <option value="upcoming">Upcoming</option>
-        </select>
-      </div>
-      <div>
-        <h3 className="font-semibold mb-2">Rating</h3>
-        <select
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-          className="w-full bg-background-light text-text px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="all">All</option>
-          <option value="pg">PG - Children</option>
-          <option value="pg13">PG-13 - Teens 13 or older</option>
-          <option value="g">G - All Ages</option>
-          <option value="r17">R - 17+ (violence & profanity)</option>
-          <option value="r">R+ - Mild Nudity</option>
+          {statuses.map((statusOption) => (
+            <option key={statusOption.id} value={statusOption.id}>
+              {statusOption.name}
+            </option>
+          ))}
         </select>
       </div>
       <button
