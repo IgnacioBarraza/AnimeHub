@@ -9,7 +9,7 @@
     getAnimeById: (id: number) => Promise<AniListAnimeData | null>
     searchAnime: (
       searchQuery: string,
-      selectedGenres: number[],
+      selectedGenres: string[],
       status: ValidAnimeStatus,
       selectedType: ValidAnimeTypes[]
     ) => Promise<AniListAnimeData[]>
@@ -125,7 +125,7 @@
 
     const searchAnime = async (
       searchQuery: string,
-      selectedGenres: number[],
+      selectedGenres: string[],
       status: ValidAnimeStatus,
       selectedType: ValidAnimeTypes[] // Ensure selectedType is of the union type
     ): Promise<AniListAnimeData[]> => {

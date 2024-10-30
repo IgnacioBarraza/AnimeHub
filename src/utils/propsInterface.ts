@@ -90,11 +90,11 @@ export interface SearchBarProps {
 }
 
 export interface AnimeFiltersProps {
-  selectedGenres: number[]
+  selectedGenres: string[]
   selectedType: ValidAnimeTypes[]
   status: ValidAnimeStatus
   clearFilters: () => void
-  toggleGenre: (genre: number) => void
+  toggleGenre: (genre: string) => void
   toggleType: (type: ValidAnimeTypes) => void
   setStatus: (status: ValidAnimeStatus) => void
 }

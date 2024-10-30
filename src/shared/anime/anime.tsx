@@ -14,7 +14,7 @@ export default function Anime() {
   const [animeResults, setAnimeResults] = useState<AniListAnimeData[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [selectedGenres, setSelectedGenres] = useState<number[]>([])
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [selectedType, setSelectedType] = useState<ValidAnimeTypes[]>([])
   const [status, setStatus] = useState<ValidAnimeStatus>('RELEASING')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
@@ -76,7 +76,7 @@ export default function Anime() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
     const search = urlParams.get('search') || ''
-    const genres = (urlParams.get('genres')?.split(',') || []).map(Number)
+    const genres = urlParams.get('genres')?.split(',') || []
     const type = (urlParams.get('type')?.split(',') || []) as ValidAnimeTypes[]
     const status = (urlParams.get('status') || 'RELEASING') as ValidAnimeStatus
 
@@ -90,7 +90,7 @@ export default function Anime() {
     }
   }, [])
 
-  const toggleGenre = (genreId: number) => {
+  const toggleGenre = (genreId: string) => {
     setSelectedGenres((prev) =>
       prev.includes(genreId)
         ? prev.filter((id) => id !== genreId)

@@ -36,7 +36,7 @@ export default function Filters({
 
   useEffect(() => {
     fetchGenres()
-  }, [])
+  })
 
   const fetchGenres = async () => {
     const response = await getAnimeGenres()
@@ -64,8 +64,8 @@ export default function Filters({
             >
               <Checkbox
                 id={`genre-${genre.id}`}
-                checked={selectedGenres.includes(genre.id)}
-                onCheckedChange={() => toggleGenre(genre.id)}
+                checked={selectedGenres.includes(genre.name)}
+                onCheckedChange={() => toggleGenre(genre.name)}
               />
               <label
                 htmlFor={`genre-${genre.id}`}
