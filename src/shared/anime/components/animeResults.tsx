@@ -30,7 +30,7 @@ export default function AnimeResults({ anime, searchQuery }: AnimeResultProps) {
             {anime.averageScore && (
               <div className="flex items-center mt-1">
                 <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                <span>{anime.averageScore || 'N/A'}</span>
+                <span>{anime.averageScore+'%' || 'N/A'}</span>
               </div>
             )}
             <div className="mt-1">Status: {statusDict[anime.status]}</div>

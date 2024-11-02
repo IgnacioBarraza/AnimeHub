@@ -1,7 +1,7 @@
 import { CardContent, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AniListAnimeData, ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
+import { AniListAnimeData, Genre, ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
 import { AlertCircle, ChevronDown, Filter } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Filters from './components/filters'
@@ -17,8 +17,9 @@ export default function Anime() {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [selectedType, setSelectedType] = useState<ValidAnimeTypes[]>([])
   const [status, setStatus] = useState<ValidAnimeStatus>('RELEASING')
+  const [genres, setGenres] = useState<Genre[]>([])
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const { searchAnime } = useAnimeContext()
+  const { searchAnime, getAnimeGenres } = useAnimeContext()
 
   const searchAnimeQuery = async () => {
     if (!searchQuery.trim()) return
@@ -98,6 +99,27 @@ export default function Anime() {
     )
   }
 
+  useEffect(() => {
+    if (genres.length === 0) {
+      fetchGenres()
+    }
+  }, [])
+
+  const fetchGenres = async () => {
+    const response = await getAnimeGenres()
+    if (response) {
+      const fetchedGenres = response
+      if (Array.isArray(fetchedGenres)) {
+        const genreObjects: Genre[] = fetchedGenres.map((genre, index) => ({
+          id: index + 1,
+          name: genre,
+        }))
+        console.log(genreObjects)
+        setGenres(genreObjects)
+      }
+    }
+  }
+
   const toggleType = (type: ValidAnimeTypes) => {
     setSelectedType((prev) =>
       prev.includes(type) ? prev.filter((s) => s !== type) : [...prev, type]
@@ -145,6 +167,7 @@ export default function Anime() {
                 toggleGenre={toggleGenre}
                 toggleType={toggleType}
                 setStatus={setStatus}
+                genres={genres}
               />
             )}
           </div>

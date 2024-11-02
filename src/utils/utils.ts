@@ -86,7 +86,9 @@ export const platformColors: { [key: string]: string } = {
   iQ: 'bg-blue-500 hover:bg-blue-700',
   'Official Site': 'bg-gray-500 hover:bg-gray-700',
   'Bilibili TV': 'bg-sky-400 hover:bg-sky-600',
-  YouTube: 'bg-red-600 hover:bg-red-800'
+  YouTube: 'bg-red-600 hover:bg-red-800',
+  'Tubi TV': 'bg-yellow-500 hover:bg-yellow-700',
+  'Adult Swim': 'bg-black'
 }
 
 function formatDescription(description: string) {

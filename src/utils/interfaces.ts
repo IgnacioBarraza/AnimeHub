@@ -135,7 +135,7 @@ export interface AniListAnimeData {
     english?: string
     native: string
   }
-  description?: string
+  description: string
   trailer?: {
     id: string
     site: string

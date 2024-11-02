@@ -1,5 +1,5 @@
 import { ReactNode, RefObject } from 'react'
-import { AniListAnimeData, MangaDexData, RouteConfig, ValidAnimeStatus, ValidAnimeTypes } from './interfaces'
+import { AniListAnimeData, Genre, MangaDexData, RouteConfig, ValidAnimeStatus, ValidAnimeTypes } from './interfaces'
 import { Location } from 'react-router-dom'
 
 
@@ -97,6 +97,7 @@ export interface AnimeFiltersProps {
   toggleGenre: (genre: string) => void
   toggleType: (type: ValidAnimeTypes) => void
   setStatus: (status: ValidAnimeStatus) => void
+  genres: Genre[]
 }
 
 export interface AnimeResultProps {

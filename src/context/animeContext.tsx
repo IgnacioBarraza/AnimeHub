@@ -31,16 +31,19 @@ export const AnimeProvider = ({ children }: ContextProviderProps) => {
   // Load cache data from localStorage on component mount
   useEffect(() => {
     const storedData = localStorage.getItem('animeCache')
+    const storedGenresData = localStorage.getItem('genreCache')
     const storedTimestamps = localStorage.getItem('animeCacheTimestamps')
     if (storedData) setCachedData(JSON.parse(storedData))
+    if (storedGenresData) setGenreCachedData(JSON.parse(storedGenresData))
     if (storedTimestamps) setCacheTimestamps(JSON.parse(storedTimestamps))
   }, [])
 
   // Save cache data to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('animeCache', JSON.stringify(cachedData))
+    localStorage.setItem('genreCache', JSON.stringify(genreCachedData))
     localStorage.setItem('animeCacheTimestamps', JSON.stringify(cacheTimestamps))
-  }, [cachedData, cacheTimestamps])
+  }, [cachedData, cacheTimestamps, genreCachedData])
 
   const fetchFromAniList = async (query: string, cacheKey: string): Promise<AniListAnimeData[]> => {
     const now = Date.now()
@@ -202,7 +205,7 @@ export const AnimeProvider = ({ children }: ContextProviderProps) => {
 
   const getAnimeGenres = async (): Promise<GenreResponse | null> => {
     const cacheKey = 'animeGenres'
-    if (cachedData[cacheKey] && (Date.now() - cacheTimestamps[cacheKey]) < CACHE_EXPIRY) {
+    if (genreCachedData[cacheKey] && (Date.now() - cacheTimestamps[cacheKey]) < CACHE_EXPIRY) {
       return genreCachedData[cacheKey] as GenreResponse
     }
 

@@ -1,9 +1,7 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useAnimeContext } from '@/hooks/animeHook'
-import { Genre, ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
+import { ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
 import { AnimeFiltersProps } from '@/utils/propsInterface'
-import { useEffect, useState } from 'react'
 
 export default function Filters({
   selectedGenres,
@@ -13,9 +11,8 @@ export default function Filters({
   toggleType,
   status,
   clearFilters,
+  genres
 }: AnimeFiltersProps) {
-  const { getAnimeGenres } = useAnimeContext()
-  const [genres, setGenres] = useState<Genre[]>([])
 
   const types: { name: string; id: ValidAnimeTypes }[] = [
     { name: 'TV', id: 'tv' },
@@ -26,31 +23,12 @@ export default function Filters({
     { name: 'Music', id: 'music' },
   ]
 
-  // Updated statuses according to AniList API
   const statuses = [
     { name: 'Currently Airing', id: 'RELEASING' },
     { name: 'Finished Airing', id: 'FINISHED' },
     { name: 'Not Yet Aired', id: 'NOT_YET_RELEASED' },
     { name: 'Canceled', id: 'CANCELLED' },
   ]
-
-  useEffect(() => {
-    fetchGenres()
-  })
-
-  const fetchGenres = async () => {
-    const response = await getAnimeGenres()
-    if (response) {
-      const fetchedGenres = response.data.GenreCollection
-      if (Array.isArray(fetchedGenres)) {
-        const genreObjects: Genre[] = fetchedGenres.map((genre, index) => ({
-          id: index,
-          name: genre,
-        }))
-        setGenres(genreObjects)
-      }
-    }
-  }
 
   return (
     <div className="space-y-4">
