@@ -103,3 +103,7 @@ export interface AnimeResultProps {
   anime: AniListAnimeData
   searchQuery: string
 }
+
+export interface AnimeInfoProps {
+  anime: AniListAnimeData
+}

@@ -46,7 +46,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <header className="bg-background-lighter py-4 sticky top-0 z-10">
+    <header className="bg-background py-4 sticky top-0 z-10 border-b">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold flex items-center">
           <AnimeHubLogo className="w-8 h-8 mr-2" />

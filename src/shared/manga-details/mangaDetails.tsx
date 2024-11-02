@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useMangaContext } from '@/hooks/mangaHook'
 import { MangaDexData } from '@/utils/interfaces'
 import { MangaInfo } from './components/mangaInfo'
-import { SkeletonLoader } from './components/skeletonLoader'
+import { SkeletonLoader } from '../../components/SkeletonLoader/skeletonLoader'
 
 export default function MangaDetails() {
   const [searchParams] = useSearchParams()

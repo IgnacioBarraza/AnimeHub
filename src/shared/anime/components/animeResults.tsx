@@ -6,16 +6,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AnimeResultProps } from '@/utils/propsInterface'
+import { statusDict } from '@/utils/utils'
 import { Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function AnimeResults({ anime, searchQuery }: AnimeResultProps) {
-  const statusDict = {
-    RELEASING: 'Airing',
-    FINISHED: 'Finished',
-    NOT_YET_RELEASED: 'Not Yet Aired',
-    CANCELLED: 'Cancelled',
-  }
   return (
     <Card
       key={anime.id}
@@ -46,7 +41,7 @@ export default function AnimeResults({ anime, searchQuery }: AnimeResultProps) {
         </div>
       </CardContent>
       <CardFooter>
-        <Link to={`anime-details?search=${searchQuery}&id=${anime.id}`}>
+        <Link to={`/home/anime-details?search=${searchQuery}&id=${anime.id}`}>
           See More Details
         </Link>
       </CardFooter>

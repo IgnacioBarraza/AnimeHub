@@ -53,12 +53,69 @@ export const languageTranslate: { [key: string]: string } = {
 export const getStatusColor = (status: string) => {
   switch (status) {
     case 'ongoing':
-      return 'text-green-500' // Green for ongoing
+      return 'text-green-500'
     case 'completed':
-      return 'text-blue-500' // Blue for completed
+      return 'text-blue-500'
     case 'hiatus':
-      return 'text-amber-600' // Red for on hiatus
+      return 'text-amber-600'
+    case 'FINISHED':
+      return 'text-blue-500'
+    case 'RELEASING':
+      return 'text-green-500'
+    case 'NOT_YET_RELEASED':
+      return 'text-amber-500'
+    case 'CANCELLED':
+      return 'text-red-500'
     default:
-      return 'text-gray-500' // Default color if status is unknown
+      return 'text-gray-500'
+  }
+}
+
+export const statusDict = {
+  RELEASING: 'Airing',
+  FINISHED: 'Finished',
+  NOT_YET_RELEASED: 'Not Yet Aired',
+  CANCELLED: 'Cancelled',
+}
+
+export const platformColors: { [key: string]: string } = {
+  Crunchyroll: 'bg-orange-500 hover:bg-orange-700',
+  Netflix: 'bg-red-700 hover:bg-red-900',
+  Hulu: 'bg-green-500 hover:bg-green-700',
+  'Amazon Prime Video': 'bg-yellow-600 hover:bg-yellow-800',
+  iQ: 'bg-blue-500 hover:bg-blue-700',
+  'Official Site': 'bg-gray-500 hover:bg-gray-700',
+  'Bilibili TV': 'bg-sky-400 hover:bg-sky-600',
+  YouTube: 'bg-red-600 hover:bg-red-800'
+}
+
+function formatDescription(description: string) {
+  return description
+    .replace(/\n/g, '')
+    .replace(/<br\s*\/?>/gi, '<br>')
+    .replace(/<i>(.*?)<\/i>/gi, '<em>$1</em>')
+    .replace(/<strong>(.*?)<\/strong>/gi, '<strong>$1</strong>')
+    .replace(/\(Source:\s*(.*?)\)/gi, '<p><strong>Source:</strong> $1</p>')
+}
+
+function extractTextFromHtml(html: string) {
+  // Use a temporary element to parse HTML and get plain text
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = html
+  return tempDiv.textContent || tempDiv.innerText || ''
+}
+
+export function formatDescriptionWithLimit(description: string, limit: number, showFullDescription: unknown) {
+  // Format and extract plain text for character count
+  const formattedDescription = formatDescription(description)
+  const plainText = extractTextFromHtml(formattedDescription)
+
+  // Check if the full description should be displayed
+  if (showFullDescription || plainText.length <= limit) {
+    return formattedDescription // Return full formatted description
+  } else {
+    // Limit the plain text and reformat it
+    const limitedText = plainText.slice(0, limit) + '...'
+    return formatDescription(limitedText)
   }
 }

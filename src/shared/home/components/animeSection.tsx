@@ -1,4 +1,5 @@
 import { AniListAnimeData } from '@/utils/interfaces'
+import { statusDict } from '@/utils/utils'
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -54,7 +55,7 @@ export default function AnimeSeriesScroll({
                 <div className="flex items-center">
                   <Clock className="w-4 h-4 mr-1" />
                   <span className="text-sm text-muted-foreground">
-                    {item.status}
+                    {statusDict[item.status]}
                   </span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">

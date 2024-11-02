@@ -133,17 +133,66 @@ export interface AniListAnimeData {
   title: {
     romaji: string
     english?: string
+    native: string
+  }
+  description?: string
+  trailer?: {
+    id: string
+    site: string
+    thumbnail?: string
+  }
+  streamingEpisodes?: {
+    title: string
+    thumbnail: string
+    url: string
+    site: string
+  }[]
+  characters: {
+    edges: {
+      node: {
+        id: number
+        name: {
+          full: string
+        }
+        image: {
+          large: string
+        }
+      }
+      voiceActors: {
+        id: number
+        name: {
+          full: string
+        }
+        image: {
+          large: string
+        }
+      }[]
+    }[]
   }
   coverImage: {
     large: string
     extraLarge: string
   }
+  airingSchedule: {
+    notYetAired: boolean
+  }
+  externalLinks: {
+    icon: string
+    site: string
+    url: string
+  }[]
+  startDate: {
+    year: number
+    month: number
+    day: number
+  }
+  bannerImage?: string
+  genres: string[]
   averageScore?: number
-  episodes?: number
-  genres?: string[]
   status: 'FINISHED' | 'RELEASING' | 'NOT_YET_RELEASED' | 'CANCELLED'
-  description?: string
+  episodes?: number
 }
+
 
 export type ValidAnimeTypes = 'tv' | 'tv_short' | 'movie' | 'special' | 'ova' | 'ona' | 'music'
 export type ValidAnimeStatus = 'RELEASING' | 'FINISHED' | 'NOT_YET_RELEASED' | 'CANCELLED'
