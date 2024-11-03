@@ -18,7 +18,7 @@ export default function AnimeChapters({ anime }: AnimeInfoProps) {
   return (
     <div className="mt-6">
       <h2 className="text-text font-bold text-lg mb-2">Episodes:</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {sortedEpisodes.slice(0, episodeLimit).map((episode, index) => (
           <button
             key={index}

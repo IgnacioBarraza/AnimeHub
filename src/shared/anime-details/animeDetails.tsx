@@ -19,7 +19,6 @@ export default function AnimeDetails() {
         const animeInfo = await getAnimeById(Number(id))
         if (animeInfo) {
           setAnime(animeInfo)
-          console.log(animeInfo)
         }
       }
       setIsLoading(false)

@@ -68,7 +68,6 @@ export const AnimeProvider = ({ children }: ContextProviderProps) => {
   const getAnimeById = async (id: number): Promise<AniListAnimeData | null> => {
     const cacheKey = `anime_${id}`
 
-    // Return from cache if valid
     if (cachedData[cacheKey] && (Date.now() - cacheTimestamps[cacheKey]) < CACHE_EXPIRY) {
       return cachedData[cacheKey] as AniListAnimeData
     }
@@ -81,8 +80,9 @@ export const AnimeProvider = ({ children }: ContextProviderProps) => {
           description
           trailer { id site thumbnail }
           streamingEpisodes { title thumbnail url site }
-          characters(role: MAIN) {
+          characters {
             edges {
+              role
               node { id name { full } image { large } }
               voiceActors(language: JAPANESE) { id name { full } image { large } }
             }

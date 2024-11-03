@@ -6,7 +6,7 @@ export interface RouteConfig {
   protection?: {
     roles: string[]
   }
-  routes?: RouteConfig[] // For nested routes
+  routes?: RouteConfig[]
 }
 
 
@@ -149,6 +149,7 @@ export interface AniListAnimeData {
   }[]
   characters: {
     edges: {
+      role: string
       node: {
         id: number
         name: {
@@ -214,15 +215,18 @@ export const statusMap: { [key: string]: ValidAnimeStatus } = {
   CANCELED: 'CANCELLED',
 }
 
-// Interface for the main API response
 interface AniListResponse<T> {
   data: T
 }
 
-// Interface for the genre collection data
 interface GenreCollectionData {
-  GenreCollection: string[] // Array of genres as strings
+  GenreCollection: string[]
 }
 
-// Combine them to define the full response type
 export type GenreResponse = AniListResponse<GenreCollectionData>
+
+export interface DateObject {
+  year: number
+  month: number
+  day: number
+}

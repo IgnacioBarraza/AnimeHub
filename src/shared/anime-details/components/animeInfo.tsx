@@ -1,16 +1,17 @@
-import { Badge } from '@/components/ui/badge'
 import { AnimeInfoProps } from '@/utils/propsInterface'
 import {
+  formatDate,
   formatDescriptionWithLimit,
   getStatusColor,
-  platformColors,
   statusDict,
 } from '@/utils/utils'
 import { Calendar, Clock } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import CharacterList from './characterList'
 import AnimeChapters from './animeChapters'
+import ExternalLinks from './externalLinks'
+import AnimeHeader from './animeHeader'
 
 export default function AnimeInfo({ anime }: AnimeInfoProps) {
   const location = useLocation()
@@ -37,57 +38,10 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
 
   return (
     <div className="flex flex-col mx-auto">
-      <div
-        className="relative rounded-lg h-64 w-full bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${anime.bannerImage})`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg"></div>
-        <div className="relative z-10 flex items-start h-full p-4">
-          <img
-            src={anime.coverImage.extraLarge}
-            alt={`${anime.title.english || anime.title.romaji} Cover`}
-            className="w-40 h-auto rounded-lg shadow-lg"
-          />
-          <div className="ml-6 text-white">
-            <h1 className="text-lg lg:text-4xl font-bold mb-2">
-              {anime.title.english || anime.title.romaji}
-            </h1>
-            {anime.genres.map((genre, index) => (
-              <Badge key={index} className="mr-1 text-white lg:text-md">{genre}</Badge>
-            ))}
-          </div>
-        </div>
-      </div>
+      <AnimeHeader anime={anime} />
       <div className="flex flex-col md:flex-row gap-8 mt-4 px-4 md:px-0">
         <div className="md:w-1/3">
-          {anime.externalLinks.length > 0 && (
-            <span className="text-text mt-4 font-bold">Where to watch:</span>
-          )}
-          <div className="flex flex-wrap gap-2 mt-4 ">
-            {anime.externalLinks.length > 0 &&
-              anime.externalLinks
-                ?.filter((link) => link.icon)
-                .map((link, index) => (
-                  <Link
-                    key={index}
-                    to={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center text-white px-4 py-2 rounded-full transition duration-300 ${
-                      platformColors[link.site] || 'bg-black'
-                    }`}
-                  >
-                    <img
-                      src={link.icon}
-                      alt={`${link.site} icon`}
-                      className="w-5 h-5 mr-2"
-                    />
-                    {link.site}
-                  </Link>
-                ))}
-          </div>
+          <ExternalLinks anime={anime} />
           {hasSearchParam && (
             <button
               onClick={handleGoBack}
@@ -118,8 +72,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
               <div className="flex items-center">
                 <Calendar className="w-5 h-5 mr-2" />
                 <span>
-                  {anime.startDate.day}/{anime.startDate.month}/
-                  {anime.startDate.year}
+                  {formatDate(anime.startDate)}
                 </span>
               </div>
             )}

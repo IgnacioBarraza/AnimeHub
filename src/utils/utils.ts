@@ -1,3 +1,5 @@
+import { DateObject } from './interfaces'
+
 export const languageFlags: { [key: string]: string } = {
   en: '/flags/en.svg', // English
   ja: '/flags/jp.svg', // Japanese
@@ -82,7 +84,7 @@ export const platformColors: { [key: string]: string } = {
   Crunchyroll: 'bg-orange-500 hover:bg-orange-700',
   Netflix: 'bg-red-700 hover:bg-red-900',
   Hulu: 'bg-green-500 hover:bg-green-700',
-  'Amazon Prime Video': 'bg-yellow-600 hover:bg-yellow-800',
+  'Amazon Prime Video': 'bg-sky-500 hover:bg-sky-900',
   iQ: 'bg-blue-500 hover:bg-blue-700',
   'Official Site': 'bg-gray-500 hover:bg-gray-700',
   'Bilibili TV': 'bg-sky-400 hover:bg-sky-600',
@@ -120,4 +122,15 @@ export function formatDescriptionWithLimit(description: string, limit: number, s
     const limitedText = plainText.slice(0, limit) + '...'
     return formatDescription(limitedText)
   }
+}
+
+export const formatDate = (dateObj: DateObject): string => {
+  // JavaScript's Date object uses 0-indexed months, so we subtract 1 from month
+  const date = new Date(dateObj.year, dateObj.month - 1, dateObj.day)
+
+  // Options for date formatting
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' }
+
+  // Format the date and return it as a string
+  return `Aired: ${date.toLocaleDateString('en-US', options)}`
 }
