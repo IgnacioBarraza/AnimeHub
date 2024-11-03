@@ -38,7 +38,7 @@ export default function AnimeDetails() {
   if (!anime || id === null) {
     return (
       <div className="text-center mt-8">
-        <h2 className="text-2xl font-bold mb-6">Manga Not Found</h2>
+        <h2 className="text-2xl font-bold mb-6">Anime Not Found</h2>
         <Link
           to="/anime"
           className="px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary/90"

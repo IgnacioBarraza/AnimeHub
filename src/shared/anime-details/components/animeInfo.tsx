@@ -6,18 +6,17 @@ import {
   platformColors,
   statusDict,
 } from '@/utils/utils'
-import { Calendar, Clock, Play } from 'lucide-react'
+import { Calendar, Clock } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import CharacterList from './characterList'
+import AnimeChapters from './animeChapters'
 
 export default function AnimeInfo({ anime }: AnimeInfoProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const initialEpisodeLimit = 6
 
   const [showFullDescription, setShowFullDescription] = useState(false)
-  const [episodeLimit, setEpisodeLimit] = useState(initialEpisodeLimit) // initial count of visible episodes
   const descriptionLimit = 400
 
   const handleGoBack = () => {
@@ -35,18 +34,6 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
     descriptionLimit,
     showFullDescription
   )
-
-  // Sort episodes in ascending order by episode number
-  // Sort episodes in ascending order by episode number, with a fallback to an empty array
-  const sortedEpisodes = [...(anime.streamingEpisodes || [])].sort((a, b) => {
-    const episodeNumberA = parseInt(a.title.match(/\d+/)?.[0] || '0')
-    const episodeNumberB = parseInt(b.title.match(/\d+/)?.[0] || '0')
-    return episodeNumberA - episodeNumberB
-  })
-
-  const handleShowMoreEpisodes = () => {
-    setEpisodeLimit((prevLimit) => prevLimit + initialEpisodeLimit)
-  }
 
   return (
     <div className="flex flex-col mx-auto">
@@ -110,43 +97,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
             </button>
           )}
           {anime.streamingEpisodes && anime.streamingEpisodes.length > 0 && (
-            <div className="mt-6">
-              <h2 className="text-text font-bold text-lg mb-2">Episodes:</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {sortedEpisodes.slice(0, episodeLimit).map((episode, index) => (
-                  <button
-                    key={index}
-                    onClick={() =>
-                      window.open(episode.url, '_blank', 'noopener,noreferrer')
-                    }
-                    className="relative group overflow-hidden rounded-lg"
-                  >
-                    <img
-                      src={episode.thumbnail}
-                      alt=""
-                      className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Play className="w-12 h-12 text-white" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-black bg-opacity-75">
-                      <span className="text-sm text-white truncate block">
-                        {episode.title}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-              {/* Show "View all episodes" button if there are more episodes */}
-              {episodeLimit < sortedEpisodes.length && (
-                <button
-                  onClick={handleShowMoreEpisodes}
-                  className="mt-4 text-blue-500 hover:underline"
-                >
-                  View more episodes
-                </button>
-              )}
-            </div>
+            <AnimeChapters anime={anime} />
           )}
         </div>
         <div className="md:w-2/3">
