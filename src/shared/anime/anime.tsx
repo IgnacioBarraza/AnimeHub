@@ -5,9 +5,10 @@ import { AniListAnimeData, Genre, ValidAnimeStatus, ValidAnimeTypes } from '@/ut
 import { AlertCircle, ChevronDown, Filter } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Filters from './components/filters'
-import SearchBar from './components/searchBar'
+import SearchBar from '@/components/searchBar/searchBar'
 import AnimeResults from './components/animeResults'
 import { useAnimeContext } from '@/hooks/animeHook'
+import { useLocation } from 'react-router-dom'
 
 export default function Anime() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -20,9 +21,14 @@ export default function Anime() {
   const [genres, setGenres] = useState<Genre[]>([])
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const { searchAnime, getAnimeGenres } = useAnimeContext()
+  const location = useLocation()
 
   const searchAnimeQuery = async () => {
-    if (!searchQuery.trim()) return
+    // Clear results if the search query is empty
+    if (!searchQuery.trim()) {
+      setAnimeResults([])
+      return
+    }
 
     setIsLoading(true)
     setError(null)
@@ -47,6 +53,9 @@ export default function Anime() {
     const delayDebounceFn = setTimeout(() => {
       if (searchQuery) {
         searchAnimeQuery()
+      } else {
+        // Clear results immediately when searchQuery is empty
+        setAnimeResults([])
       }
     }, 500)
 
@@ -114,7 +123,6 @@ export default function Anime() {
           id: index + 1,
           name: genre,
         }))
-        console.log(genreObjects)
         setGenres(genreObjects)
       }
     }
@@ -173,8 +181,8 @@ export default function Anime() {
           </div>
         </div>
         <div className="md:w-2/3">
-          <ScrollArea className="h-[730px]">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <ScrollArea className="h-[610px]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {isLoading ? (
                 Array(3)
                   .fill(0)
@@ -197,7 +205,7 @@ export default function Anime() {
                   <AlertCircle className="mr-2" />
                   {error}
                 </div>
-              ) : animeResults.length > 0 ? (
+              ) : animeResults.length > 0 && searchQuery.length > 1 ? (
                 animeResults.map((anime) => (
                   <AnimeResults
                     anime={anime}

@@ -24,6 +24,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
     const previousLocation = localStorage.getItem('prevLocation')
     if (previousLocation) {
       const decodedLocation = decodeURIComponent(previousLocation)
+      console.log(decodedLocation)
       navigate(decodedLocation)
     }
   }
@@ -59,7 +60,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
             className="text-text-muted mb-4"
             dangerouslySetInnerHTML={{ __html: formattedDescription }}
           />
-          {!showFullDescription && (
+          {!showFullDescription && anime.description.length > descriptionLimit && (
             <button
               onClick={() => setShowFullDescription(true)}
               className="text-blue-500 hover:underline"

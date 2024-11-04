@@ -60,7 +60,6 @@ export default function CharacterList({ anime }: AnimeInfoProps) {
             </div>
           </div>
         ))}
-        {/* Show More button to toggle displaying all characters */}
         {otherCharacters.length > 0 && (
           <button
             onClick={() => setShowAll(!showAll)}
