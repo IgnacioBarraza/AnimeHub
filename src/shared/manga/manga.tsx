@@ -140,6 +140,7 @@ export default function Manga() {
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
+              isAnimeOrMangaSearch='a manga'
             />
             <div className="mb-4">
               <button

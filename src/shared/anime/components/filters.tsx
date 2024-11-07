@@ -2,8 +2,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
 import { AnimeFiltersProps } from '@/utils/propsInterface'
+import { memo } from 'react'
 
-export default function Filters({
+export const Filters = memo(function Filters({
   selectedGenres,
   selectedType,
   toggleGenre,
@@ -96,3 +97,4 @@ export default function Filters({
     </div>
   )
 }
+)

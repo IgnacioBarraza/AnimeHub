@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { AniListAnimeData, Genre, ValidAnimeStatus, ValidAnimeTypes } from '@/utils/interfaces'
 import { AlertCircle, ChevronDown, Filter } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import Filters from './components/filters'
+import { Filters } from './components/filters'
 import SearchBar from '@/components/searchBar/searchBar'
 import AnimeResults from './components/animeResults'
 import { useAnimeContext } from '@/hooks/animeHook'
@@ -149,6 +149,7 @@ export default function Anime() {
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
+              isAnimeOrMangaSearch='an anime'
             />
             <div className="mb-4">
               <button

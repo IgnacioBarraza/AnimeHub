@@ -87,6 +87,7 @@ export interface MangaFiltersProps {
 export interface SearchBarProps {
   searchQuery: string
   setSearchQuery: (query: string) => void
+  isAnimeOrMangaSearch: string
 }
 
 export interface AnimeFiltersProps {
